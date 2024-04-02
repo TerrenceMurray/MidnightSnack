@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		"module": "CommonJS",
-		"moduleResolution": "Node",
+		"module": "ES2020",
+		"moduleResolution": "classic",
 		"target": "ES2020",
 		"jsx": "react",
 		"allowImportingTsExtensions": true,
