@@ -58,6 +58,10 @@
 		@apply bg-background text-primary w-full h-screen;
 	}
 
+	.heading {
+		@apply text-6xl leading-tight text-primary font-bold;
+	}
+
 	.title {
 		@apply text-[2rem] text-primary font-bold;
 	}
