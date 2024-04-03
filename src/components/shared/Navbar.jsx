@@ -22,7 +22,7 @@ export default function Navbar ()
                 <CartButton />
                 <Link to="/settings/profile">
                     <Avatar className="rounded-lg">
-                        <AvatarFallback className="rounded-lg">
+                        <AvatarFallback className="text-secondary bg-foreground rounded-lg">
                             TM
                         </AvatarFallback>
                     </Avatar>

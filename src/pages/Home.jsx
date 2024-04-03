@@ -8,7 +8,10 @@ export default function Home ()
 
     return (
         <Layout>
-            <img src={HeroImage} alt="Home" />
+            <main className="px-32 flex w-full flex-1 items-center">
+                <img className="ml-auto" src={HeroImage} alt="Home" />
+
+            </main>
         </Layout>
     );
 }

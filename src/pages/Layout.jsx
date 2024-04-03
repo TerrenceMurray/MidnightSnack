@@ -7,7 +7,7 @@ export default function Layout ({ children })
             <header>
                 <Navbar />
             </header>
-            <main>{children}</main>
+            {children}
         </>
     );
 }
