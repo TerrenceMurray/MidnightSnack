@@ -17,6 +17,9 @@ module.exports = {
 			},
 		},
 		extend: {
+			width: {
+				'flex-cols-2': 'calc(100% / 3 - 1.5rem)',
+			},
 			colors: {
 				white: {
 					50: '#F6FBFF',

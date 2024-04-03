@@ -12,12 +12,12 @@ export default function Restaurants ()
                 <h1 className="title">Open Restaurants</h1>
                 <h2 className="subtitle">Select a restaurant from below</h2>
             </section>
-            <section className="pb-10">
+            <section className="pb-10 w-full">
                 <div className="relative w-80">
                     <Input type="text" className="w-full py-4 px-8 h-auto bg-foreground placeholder:text-secondary" placeholder="Search for a nearby restaurant" />
                     <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-8 text-secondary text-sm"></i>
                 </div>
-                <section className="mt-8 grid grid-cols-3 justify-between gap-8">
+                <section className="mt-8 flex flex-wrap justify-between gap-y-8">
                     <RestaurantCard />
                     <RestaurantCard />
                     <RestaurantCard />

@@ -28,7 +28,7 @@ const AddressInput = forwardRef(({ onChange, className }, ref) =>
 
     return (
         <div className="relative">
-            <Input ref={inputRef} onKeyDown={onChangeHandler} className={cn("w-96 rounded-lg text-base placeholder:text-secondary bg-foreground h-auto py-4 pl-14", className)} placeholder="Enter a location" />
+            <Input ref={inputRef} onKeyDown={onChangeHandler} className={cn("w-96 rounded-lg text-base placeholder:text-secondary bg-foreground h-auto py-4 pl-14", className)} placeholder="Enter a restaurant location" />
             <i className="bi bi-geo-alt-fill absolute top-1/2 -translate-y-1/2 left-8 text-base text-secondary"></i>
             <div>
                 {/* Results */}
