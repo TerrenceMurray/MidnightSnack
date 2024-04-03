@@ -7,7 +7,7 @@
 		--surface-primary: theme(colors.white.50);
 		--surface-foreground: theme(colors.white.300);
 		--surface-secondary: theme(colors.white.300);
-		--surface-accent: theme(colors.green.300);
+		--surface-accent: theme(colors.green.400);
 
 		--text-primary: theme(colors.white.950);
 		--text-secondary: theme(colors.white.600);
@@ -71,6 +71,6 @@
 	}
 
 	#root {
-		@apply w-full h-full flex flex-col max-w-[85rem] mx-auto px-32
+		@apply w-full h-full flex flex-col max-w-[85rem] mx-auto px-32;
 	}
 }

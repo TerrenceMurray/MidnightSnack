@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import CartButton from "./CartButton";
+import CartButton from "../CartButton";
 import { cn } from "@/lib/utils";
 
 export default function Navbar ()
@@ -20,11 +20,15 @@ export default function Navbar ()
                 <NavLink to="/">
                     <img src={logo} aria-label="Go to home page" alt="Midnight Snack Logo" />
                 </NavLink>
-                <Input className="w-52 bg-foreground placeholder:text-secondary" type="text" placeholder="Search..." />
+                <div className="relative">
+                    <Input className="w-52 bg-foreground placeholder:text-secondary pr-10" type="text" placeholder="Search for restaurants" />
+                    <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-sm text-secondary
+                    "></i>
+                </div>
             </div>
             <ul className="flex ml-auto items-center gap-8">
-                <li><NavLink className={isActiveLink} to="/">Home</NavLink></li>
-                <li><NavLink className={isActiveLink} to="/restaurants">Restaurants</NavLink></li>
+                <li><NavLink aria-label="Go to home page" className={isActiveLink} to="/">Home</NavLink></li>
+                <li><NavLink aria-label="Go to restaurants page" className={isActiveLink} to="/restaurants">Restaurants</NavLink></li>
             </ul>
             <div className="flex gap-6">
                 <CartButton />

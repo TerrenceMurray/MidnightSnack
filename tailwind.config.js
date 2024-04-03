@@ -45,6 +45,9 @@ module.exports = {
 					400: '#FF666D',
 					600: '#EB1721',
 				},
+				button: {
+					text: 'var(--button-text)',
+				},
 				border: 'var(--surface-secondary)',
 				input: 'hsl(var(--input))',
 				ring: 'var(--ring)',
