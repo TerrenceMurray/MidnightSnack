@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup and Login Page</title>
+</head>
+<body>
+<h2>Are you a Customer or Business?</h2>
+<button onclick="showCustomerForm()">Customer</button>
+<button onclick="showBusinessForm()">Business</button>
+<div id="customerForm" style="display: none;">
+  <h2>Customer Signup Form</h2>
+  <form id="customerSignupForm" onsubmit="submitCustomerForm(event)">
+    <label for="customerFirstName">First Name:</label>
+    <input type="text" id="customerFirstName" name="customerFirstName" required><br><br>
+    
+    <label for="customerLastName">Last Name:</label>
+    <input type="text" id="customerLastName" name="customerLastName" required><br><br>
+    
+    <label for="customerEmail">Email Address:</label>
+    <input type="email" id="customerEmail" name="customerEmail" required><br><br>
+    
+    <label for="customerPhone">Telephone Number:</label>
+    <input type="tel" id="customerPhone" name="customerPhone" required><br><br>
+    
+    <label for="customerAddress">Address:</label>
+    <textarea id="customerAddress" name="customerAddress" required></textarea><br><br>
+    
+    <input type="submit" value="Sign Up">
+  </form>
+</div>
+<div id="businessForm" style="display: none;">
+  <h2>Business Signup Form</h2>
+  <form id="businessSignupForm" onsubmit="submitBusinessForm(event)">
+    <label for="businessName">Business Name:</label>
+    <input type="text" id="businessName" name="businessName" required><br><br>
+    
+    <label for="businessContact">Contact Number:</label>
+    <input type="tel" id="businessContact" name="businessContact" required><br><br>
+    
+    <label for="businessEmail">Email Address:</label>
+    <input type="email" id="businessEmail" name="businessEmail" required><br><br>
+    
+    <label for="businessAddress">Business Address:</label>
+    <textarea id="businessAddress" name="businessAddress" required></textarea><br><br>
+    
+    <label for="Cateogory">Category:</label>
+    <textarea id="Category" name="Category" required></textarea><br><br>
+    
+    <input type="submit" value="Sign Up">
+  </form>
+</div>
+<script>
+function showCustomerForm() {
+  document.getElementById("customerForm").style.display = "block";
+  document.getElementById("businessForm").style.display = "none";
+}
+function showBusinessForm() {
+  document.getElementById("customerForm").style.display = "none";
+  document.getElementById("businessForm").style.display = "block";
+}
+function submitCustomerForm(event) {
+  event.preventDefault();
+  const formData = new FormData(document.getElementById('customerSignupForm'));
+  const data = Object.fromEntries(formData);
+  postData('https://your-api-endpoint.com/customer/signup', data);
+}
+function submitBusinessForm(event) {
+  event.preventDefault();
+  const formData = new FormData(document.getElementById('businessSignupForm'));
+  const data = Object.fromEntries(formData);
+  postData('https://your-api-endpoint.com/business/signup', data);
+}
+async function postData(url, data) {
+  try {
+    let response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    let result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+</script>
+</body>
+</html>
