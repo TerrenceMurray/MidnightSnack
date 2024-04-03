@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export default function Navbar ()
 {
     const isActiveLink = ({ isActive }) => cn(
-        "hover:text-accent transition-colors duration-00 ease-in-out",
+        "hover:text-accent transition-colors ease-in-out",
         {
             "text-primary": isActive,
             "opacity-50": !isActive
@@ -22,7 +22,7 @@ export default function Navbar ()
                 </NavLink>
                 <div className="relative">
                     <Input className="w-52 bg-foreground placeholder:text-secondary pr-10" type="text" placeholder="Search for restaurants" />
-                    <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-sm text-secondary
+                    <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-xs text-secondary
                     "></i>
                 </div>
             </div>
