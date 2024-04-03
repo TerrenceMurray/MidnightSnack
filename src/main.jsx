@@ -8,21 +8,29 @@ import Home from './pages/Home';
 import Restaurant from './pages/Restaurant';
 import Restaurants from './pages/Restaurants';
 import Error from './pages/Error';
+import Root from './Root';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Home />,
+        element: <Root />,
         errorElement: <Error />,
+        children: [
+            {
+                path: '/',
+                element: <Home />,
+            },
+            {
+                path: '/restaurants',
+                element: <Restaurants />,
+            },
+            {
+                path: '/restaurant/:id',
+                element: <Restaurant />,
+            }
+        ]
     },
-    {
-        path: '/restaurant',
-        element: <Restaurant />,
-    },
-    {
-        path: '/restaurants',
-        element: <Restaurants />,
-    }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

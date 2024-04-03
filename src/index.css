@@ -71,6 +71,6 @@
 	}
 
 	#root {
-		@apply w-full h-full flex flex-col;
+		@apply w-full h-full flex flex-col max-w-[85rem] mx-auto px-32
 	}
 }
