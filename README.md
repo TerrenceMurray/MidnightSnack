@@ -2,6 +2,8 @@
 
 Welcome to Midnight Snacks, a convenient food delivery platform designed to satisfy your late-night cravings! This GitHub repository contains the source code for our web application.
 
+![Home](https://github.com/TerrenceMurray/MidnightSnack/assets/52611990/592fe76d-027d-4c55-8b26-284f4231c273)
+
 ### Features
 
 -   **User-friendly Interface:** Easily browse through a variety of restaurants and their menus, and place orders effortlessly.
@@ -13,10 +15,10 @@ Welcome to Midnight Snacks, a convenient food delivery platform designed to sati
 
 #### Frontend
 
--   **React:** Provides a fast, interactive user experience.
--   **Shadcn-ui:** Offers sleek and customizable UI components.
--   **Tailwind:** Enables rapid UI development with utility-first CSS.
--   **Bootstrap Icons:** Enhances the user interface with visually appealing icons.
+-   React
+-   Shadcn-ui
+-   Tailwind Enables
+-   Bootstrap Icons
 
 #### Database
 
@@ -24,7 +26,7 @@ Welcome to Midnight Snacks, a convenient food delivery platform designed to sati
 
 #### Third Party APIs
 
--   **Google Maps API:** Integrated for accurate location-based services, facilitating restaurant discovery and order tracking.
+-   **Google Maps API:** Integrated for accurate location-based services.
 
 ### Getting Started
 
@@ -33,7 +35,7 @@ To run the project locally, follow these steps:
 1. Clone this repository to your local machine.
 2. Navigate to the project directory.
 3. Install dependencies by running `npm install`.
-4. Start the development server with `npm start`.
+4. Start the development server with `npm run dev`.
 5. Access the application in your web browser at `http://localhost:5173`.
 
 ### License
