@@ -1,5 +1,6 @@
 import Title from "../components/Title";
 import Layout from "./Layout";
+import HeroImage from "@/assets/Hero Image.png";
 
 export default function Home ()
 {
@@ -7,7 +8,7 @@ export default function Home ()
 
     return (
         <Layout>
-            <h1>Home</h1>
+            <img src={HeroImage} alt="Home" />
         </Layout>
     );
 }

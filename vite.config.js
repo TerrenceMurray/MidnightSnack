@@ -12,10 +12,6 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src/'),
-
-			routes: `${path.resolve(__dirname, './src/routes/')}`,
-
-			services: `${path.resolve(__dirname, './src/services/')}`,
 		},
 	},
 });

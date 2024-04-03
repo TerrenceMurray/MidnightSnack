@@ -1,16 +1,11 @@
-import { Link } from "react-router-dom";
+import Navbar from "../components/shared/Navbar";
 
 export default function Layout ({ children })
 {
     return (
         <>
             <header>
-                <nav>
-                    <ul>
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/restaurants">Restaurants</Link></li>
-                    </ul>
-                </nav>
+                <Navbar />
             </header>
             <main>{children}</main>
         </>
