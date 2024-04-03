@@ -1,5 +1,4 @@
 import Title from "../components/Title";
-import Layout from "./Layout";
 import HeroImage from "@/assets/Hero Image.png";
 import TitleSVG from "@/assets/title.svg";
 import { Button } from "@/components/ui/button";
