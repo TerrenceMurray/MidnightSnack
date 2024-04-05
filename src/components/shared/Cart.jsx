@@ -8,11 +8,11 @@ export default function Cart ({ children, className })
         <section className={cn('w-64 flex-1 h-full overflow-hidden flex flex-col', className)}>
             <h1 className='text-2xl font-bold flex-shrink-0'>Your Items</h1>
             <ScrollArea>
-                <ul className='mt-8 flex flex-col flex-1 h-full overflow-y-auto gap-6 pb-8 mr-4'>
+                <ul className='mt-8 flex flex-col flex-1 h-full overflow-y-auto gap-6 pb-8'>
                     {children}
                 </ul>
             </ScrollArea>
-            <section className='flex flex-col py-6 gap-6 font-semibold border-t border-t-foreground'>
+            <section className='flex flex-col py-6 gap-6 font-semibold border-t border-t-foreground mt-auto'>
                 <div className='flex justify-between'>
                     <p>Shipping</p>
                     <p>$50.00</p>

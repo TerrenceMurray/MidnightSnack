@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export default function Navbar ()
 {
     const isActiveLink = ({ isActive }) => cn(
-        "hover:text-accent transition-colors ease-in-out",
+        "hover:text-accent hover:opacity-100 transition-all ease-in-out",
         {
             "text-primary": isActive,
             "opacity-50": !isActive

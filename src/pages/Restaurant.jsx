@@ -23,7 +23,7 @@ export default function Restaurant ()
             <section className="flex gap-12 flex-col h-full row-span-full">
                 <section className="flex flex-col gap-1">
                     <div className="items-center">
-                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> Sushi House</h1>
+                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity mr-2" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> Sushi House</h1>
                         <h3 className="inline mx-4"><i className="bi bi-geo-alt-fill text-secondary"></i> Tunapuna</h3>
                     </div>
                     <h2 className="subtitle">Add menu items to your cart</h2>
@@ -55,10 +55,6 @@ export default function Restaurant ()
             </section>
             <section className="flex flex-col col-start-2 h-full row-span-full pb-12">
                 <Cart>
-                    <CartOrder quantity={2} />
-                    <CartOrder quantity={2} />
-                    <CartOrder quantity={2} />
-                    <CartOrder quantity={2} />
                     <CartOrder quantity={2} />
                     <CartOrder quantity={2} />
                 </Cart>
