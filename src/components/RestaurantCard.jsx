@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Image from "@/../public/pexels-fahri-baghirov-15592082.jpg";
+import Image from "@/assets/pexels-fahri-baghirov-15592082.jpg";
 
 export default function RestaurantCard ()
 {

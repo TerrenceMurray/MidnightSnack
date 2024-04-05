@@ -9,6 +9,7 @@ import Restaurant from './pages/Restaurant';
 import Restaurants from './pages/Restaurants';
 import Error from './pages/Error';
 import Root from './Root';
+import Cart from './pages/Cart';
 
 const router = createBrowserRouter([
     {
@@ -18,15 +19,19 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <Home />,
+                element: <Home />
             },
             {
                 path: '/restaurants',
-                element: <Restaurants />,
+                element: <Restaurants />
             },
             {
                 path: '/restaurants/:id',
-                element: <Restaurant />,
+                element: <Restaurant />
+            },
+            {
+                path: '/cart',
+                element: <Cart />
             }
         ]
     },

@@ -4,7 +4,7 @@ import RestaurantCard from "@/components/RestaurantCard";
 
 export default function Restaurants ()
 {
-    Title("Restaurants | Midnight Snacks");
+    Title("Midnight Snacks - Restaurants");
 
     return (
         <main className="flex flex-col gap-12">

@@ -73,4 +73,11 @@
 	#root {
 		@apply w-full h-full flex flex-col max-w-[85rem] mx-auto px-32;
 	}
+
+	.layout {
+		@apply grid;
+		height: calc(100vh - 6rem);
+		grid-template-rows: auto 1fr;
+		grid-auto-columns: 1fr auto;
+	}
 }

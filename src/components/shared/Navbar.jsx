@@ -15,7 +15,7 @@ export default function Navbar ()
         });
 
     return (
-        <nav className="flex w-full items-center py-7 gap-8">
+        <nav className="flex w-full items-center h-24 gap-8">
             <div className="flex gap-10 items-center">
                 <NavLink to="/">
                     <img src={logo} aria-label="Go to home page" alt="Midnight Snack Logo" />

@@ -21,12 +21,12 @@ export default function Home ()
     };
 
     return (
-        <main className="flex w-full flex-1 justify-between items-center   ">
+        <main className="flex w-full flex-1 justify-between items-center">
             <section className="">
                 <img className="" src={TitleSVG} aria-label="" alt="Hero section title" />
                 <p className="subtitle mt-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam aliquam  ipsum risus, ac porta sapien congue a.</p>
                 <div className="flex gap-4 items-center mt-10">
-                    <AddressInput ref={searchInput} onChange={onChangeHandler} />
+                    <AddressInput className="max-w-96" ref={searchInput} onChange={onChangeHandler} />
                     <Button onClick={onClickHandler} variant="cta" className="flex-1 py-4 h-auto flex gap-4"><i className="bi bi-search"></i> Search</Button>
                 </div>
             </section>
