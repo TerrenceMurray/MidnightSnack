@@ -12,12 +12,12 @@ export default function Cart ({ children, className })
                     {children}
                 </ul>
             </ScrollArea>
-            <section>
-                <div>
+            <section className='flex flex-col py-6 gap-6 font-semibold border-t border-t-foreground'>
+                <div className='flex justify-between'>
                     <p>Shipping</p>
                     <p>$50.00</p>
                 </div>
-                <div>
+                <div className='flex justify-between'>
                     <p>Total</p>
                     <p>$422.00</p>
                 </div>

@@ -62,7 +62,7 @@ export default function Restaurant ()
                     <CartOrder quantity={2} />
                     <CartOrder quantity={2} />
                 </Cart>
-                <Link className="mt-auto bg-accent-surface text-center text-button-text py-4 rounded-lg" to="/cart">Continue</Link>
+                <Link className="mt-auto bg-accent-surface text-center text-button-text py-4 rounded-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:opacity-60 transition-opacity duration-75" to="/cart">Continue</Link>
             </section>
         </main>
     );
