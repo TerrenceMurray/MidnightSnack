@@ -12,6 +12,16 @@ export default function Cart ({ children, className })
                     {children}
                 </ul>
             </ScrollArea>
+            <section>
+                <div>
+                    <p>Shipping</p>
+                    <p>$50.00</p>
+                </div>
+                <div>
+                    <p>Total</p>
+                    <p>$422.00</p>
+                </div>
+            </section>
         </section>
     );
 }
