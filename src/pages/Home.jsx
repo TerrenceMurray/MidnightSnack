@@ -1,8 +1,8 @@
 import Title from "../components/Title";
 import HeroImage from "@/assets/Hero Image.png";
-import TitleSVG from "@/assets/title.svg";
 import AddressInput from "@/components/AddressInput";
 import { Button } from "@/components/ui/button";
+import HomeTitle from "@/components/ui/title";
 import { useRef } from "react";
 
 export default function Home ()
@@ -23,7 +23,7 @@ export default function Home ()
     return (
         <main className="flex w-full flex-1 justify-between items-center">
             <section className="">
-                <img className="" src={TitleSVG} aria-label="" alt="Hero section title" />
+                <HomeTitle />
                 <p className="subtitle mt-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam aliquam  ipsum risus, ac porta sapien congue a.</p>
                 <div className="flex gap-4 items-center mt-10">
                     <AddressInput className="max-w-96" ref={searchInput} onChange={onChangeHandler} />

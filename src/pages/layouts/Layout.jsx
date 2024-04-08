@@ -1,4 +1,4 @@
-import Navbar from "../components/shared/Navbar";
+import Navbar from "../../components/shared/Navbar";
 
 export default function Layout ({ children })
 {

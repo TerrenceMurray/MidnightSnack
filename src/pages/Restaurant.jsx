@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import MenuItem from "@/components/MenuItem";
 import Cart from "@/components/shared/Cart";
 import CartOrder from "@/components/shared/CartOrder";
-import { ScrollArea } from "@/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Restaurant ()
 {
