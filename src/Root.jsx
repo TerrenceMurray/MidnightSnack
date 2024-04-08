@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Layout from "./pages/layouts/Layout";
+import Layout from "./pages/layouts/RootLayout";
 import { APIProvider } from "@vis.gl/react-google-maps";
 
 export default function Root ()
