@@ -2,25 +2,29 @@ import './index.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-import Home from './pages/Home';
-import Restaurant from './pages/Restaurant';
-import RestaurantSettings from './pages/settings/Restaurant';
-import Restaurants from './pages/Restaurants';
-import Error from './pages/Error';
-import Root from './Root';
-import Cart from './pages/Cart';
-import Settings from './pages/layouts/SettingsLayout';
-import Profile from './pages/settings/Profile';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
 import AuthProvider from './providers/AuthProvider';
-import Categories from './pages/settings/Categories';
-import MenuItems from './pages/settings/MenuItems';
+// import { router } from './routes';
+import { RouterProvider } from 'react-router-dom';
 
+import { createBrowserRouter } from 'react-router-dom';
 
-const router = createBrowserRouter([
+import Home from '@/pages/Home';
+import Restaurant from '@/pages/Restaurant';
+import RestaurantSettings from '@/pages/settings/Restaurant';
+import Restaurants from '@/pages/Restaurants';
+import Error from '@/pages/Error';
+import Root from '@/Root';
+import Cart from '@/pages/Cart';
+import Settings from '@/pages/layouts/SettingsLayout';
+import Profile from '@/pages/settings/Profile';
+import SignIn from '@/pages/SignIn';
+import SignUp from '@/pages/SignUp';
+import Categories from '@/pages/settings/Categories';
+import MenuItems from '@/pages/settings/MenuItems';
+
+import RestaurantsLoader from '@/loaders/restaurants.loader.js';
+
+export const router = createBrowserRouter([
     {
         path: '/',
         element: <Root />,
@@ -29,27 +33,28 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 index: true,
-                element: <Home />
+                element: <Home />,
             },
             {
                 path: 'restaurants',
-                element: <Restaurants />
+                element: <Restaurants />,
+                loader: RestaurantsLoader,
             },
             {
                 path: 'restaurants/:id',
-                element: <Restaurant />
+                element: <Restaurant />,
             },
             {
                 path: 'cart',
-                element: <Cart />
+                element: <Cart />,
             },
             {
                 path: 'signin',
-                element: <SignIn />
+                element: <SignIn />,
             },
             {
                 path: 'signup',
-                element: <SignUp />
+                element: <SignUp />,
             },
             {
                 path: 'settings/:id',
@@ -57,33 +62,34 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <Profile />
+                        element: <Profile />,
                     },
                     {
                         path: 'profile',
-                        element: <Profile />
+                        element: <Profile />,
                     },
                     {
                         path: 'restaurant',
-                        element: <RestaurantSettings />
+                        element: <RestaurantSettings />,
                     },
                     {
                         path: 'categories',
-                        element: <Categories />
+                        element: <Categories />,
                     },
                     {
                         path: 'menu-items',
-                        element: <MenuItems />
-
-                    }
-                ]
-            }
-        ]
+                        element: <MenuItems />,
+                    },
+                ],
+            },
+        ],
     },
-
 ]);
 
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
+
     <React.StrictMode>
         <AuthProvider>
             <RouterProvider router={router} />

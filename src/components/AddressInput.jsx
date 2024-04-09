@@ -1,8 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import debounce from "lodash.debounce";
-import { getLatLng } from "@/services/google.map.service";
 
 const AddressInput = forwardRef(({ onChange, className }, ref) =>
 {
@@ -28,7 +27,7 @@ const AddressInput = forwardRef(({ onChange, className }, ref) =>
 
     return (
         <div className="relative">
-            <Input ref={inputRef} onKeyDown={onChangeHandler} className={cn("w-96 rounded-lg text-base placeholder:text-secondary bg-foreground h-auto py-4 pl-14", className)} placeholder="Enter a restaurant location" />
+            <Input ref={inputRef} onKeyDown={onChangeHandler} className={cn("w-96 rounded-lg text-base placeholder:text-secondary bg-foreground h-auto py-4 pl-14", className)} placeholder="Enter a city location e.g. Tunapuna" />
             <i className="bi bi-geo-alt-fill absolute top-1/2 -translate-y-1/2 left-8 text-base text-secondary"></i>
             <div>
                 {/* Results */}
@@ -37,5 +36,7 @@ const AddressInput = forwardRef(({ onChange, className }, ref) =>
         </div>
     );
 });
+
+AddressInput.displayName = "AddressInput";
 
 export default AddressInput;
