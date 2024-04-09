@@ -12,6 +12,8 @@ import Root from './Root';
 import Cart from './pages/Cart';
 import Settings from './pages/settings/Settings';
 import Profile from './pages/settings/Profile';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
     {
@@ -25,28 +27,35 @@ const router = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: '/restaurants',
+                path: 'restaurants',
                 element: <Restaurants />
             },
             {
-                path: '/restaurants/:id',
+                path: 'restaurants/:id',
                 element: <Restaurant />
             },
             {
-                path: '/cart',
+                path: 'cart',
                 element: <Cart />
             },
             {
-                path: '/settings',
+                path: 'signin',
+                element: <SignIn />
+            },
+            {
+                path: 'signup',
+                element: <SignUp />
+            },
+            {
+                path: 'settings',
                 element: <Settings />,
                 children: [
                     {
-                        path: '/settings',
                         index: true,
                         element: <Profile />
                     },
                     {
-                        path: '/settings/profile',
+                        path: 'profile',
                         element: <Profile />
                     },
                 ]

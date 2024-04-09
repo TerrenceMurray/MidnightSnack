@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
-import AuthLayout from '../layouts/AuthLayout';
+import ProtectedLayout from '@/pages/layouts/ProtectedLayout';
 
 export default function Settings ()
 {
+
     return (
-        <AuthLayout>
+        <ProtectedLayout>
             <Outlet />
-        </AuthLayout>
+        </ProtectedLayout>
     );
 }
