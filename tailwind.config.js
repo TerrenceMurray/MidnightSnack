@@ -65,8 +65,8 @@ module.exports = {
 					foreground: 'hsl(var(--secondary-foreground))',
 				},
 				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))',
+					DEFAULT: 'var(--surface-destructive)',
+					foreground: 'var(--text-destructive)',
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',

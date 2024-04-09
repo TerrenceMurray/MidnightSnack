@@ -7,9 +7,9 @@ export default function Settings ()
 
     return (
         <ProtectedLayout>
-            <div className='flex gap-12'>
+            <div className='flex gap-12 w-full'>
                 <Sidebar />
-                <main>
+                <main className='flex-1 w-full'>
                     <Outlet />
                 </main>
             </div>

@@ -8,11 +8,13 @@
 		--surface-foreground: theme(colors.white.300);
 		--surface-secondary: theme(colors.white.300);
 		--surface-accent: theme(colors.green.400);
-
+		--surface-destructive: theme(colors.red.50);
+		
 		--text-primary: theme(colors.white.950);
 		--text-secondary: theme(colors.white.600);
 		--text-accent: theme(colors.green.400);
 		--text-white: theme(colors.white.50);
+		--text-destructive: theme(colors.red.600);
 
 		--button-primary: theme(colors.white.900);
 		--button-text: var(--text-white);
@@ -82,6 +84,6 @@
 	}
 
 	.focus {
-		
+
 	}
 }
