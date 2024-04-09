@@ -16,13 +16,17 @@ Welcome to Midnight Snacks, a convenient food delivery platform designed to sati
 #### Frontend
 
 -   React
--   Shadcn-ui
--   Tailwind Enables
+-   shadcn/ui
+-   Tailwind CSS
 -   Bootstrap Icons
+-   React Router
+-   Zustand
+-   Axios
+-   Supabase UI
 
 #### Database
 
--   **Firebase:** Utilized for secure storage and management of customer orders, restaurant listings, and user data.
+-   **Supabase:** Utilized for secure storage and management of customer orders, restaurant listings, and user data.
 
 #### Third Party APIs
 

@@ -16,6 +16,9 @@ import Profile from './pages/settings/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import AuthProvider from './providers/AuthProvider';
+import Categories from './pages/settings/Categories';
+import MenuItems from './pages/settings/MenuItems';
+
 
 const router = createBrowserRouter([
     {
@@ -49,7 +52,7 @@ const router = createBrowserRouter([
                 element: <SignUp />
             },
             {
-                path: 'settings',
+                path: 'settings/:id',
                 element: <Settings />,
                 children: [
                     {
@@ -64,6 +67,15 @@ const router = createBrowserRouter([
                         path: 'restaurant',
                         element: <RestaurantSettings />
                     },
+                    {
+                        path: 'categories',
+                        element: <Categories />
+                    },
+                    {
+                        path: 'menu-items',
+                        element: <MenuItems />
+
+                    }
                 ]
             }
         ]
