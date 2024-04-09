@@ -6,14 +6,16 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Restaurant from './pages/Restaurant';
+import RestaurantSettings from './pages/settings/Restaurant';
 import Restaurants from './pages/Restaurants';
 import Error from './pages/Error';
 import Root from './Root';
 import Cart from './pages/Cart';
-import Settings from './pages/settings/Settings';
+import Settings from './pages/layouts/SettingsLayout';
 import Profile from './pages/settings/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import AuthProvider from './providers/AuthProvider';
 
 const router = createBrowserRouter([
     {
@@ -58,6 +60,10 @@ const router = createBrowserRouter([
                         path: 'profile',
                         element: <Profile />
                     },
+                    {
+                        path: 'restaurant',
+                        element: <RestaurantSettings />
+                    },
                 ]
             }
         ]
@@ -67,6 +73,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
     </React.StrictMode>,
 );
