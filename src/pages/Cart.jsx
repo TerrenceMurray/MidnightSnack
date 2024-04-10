@@ -5,21 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { useState } from "react";
 import ProtectedLayout from "./layouts/ProtectedLayout";
+import useCart from "@/hooks/useCart";
+import { cn } from "@/lib/utils";
 
 export default function Cart ()
 {
     const [position, setPosition] = useState({ lat: 10.6549, lng: -61.5019 });
-    // const map = useMap();
-
-    // useEffect(() =>
-    // {
-    //     if (!map) return;
-
-    // }, [map]);
+    const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity, getTotal } = useCart();
 
     return (
         <ProtectedLayout>
-            <main className="flex gap-10 justify-center w-full h-full pb-12">
+            <main className="flex gap-10 justify-center w-full h-full pb-12 max-h-screen">
                 <section>
                     <section className="flex flex-col gap-1">
                         <h1 className="title">Checkout</h1>
@@ -42,13 +38,14 @@ export default function Cart ()
                                 <Pin />
                             </AdvancedMarker>
                         </Map>
-                        <Button variant="cta" className="w-full py-8">Place Order</Button>
+                        <Button variant="cta" className={cn("hover:opacity-75 transition-opacity duration-75 w-full py-8", {
+                            "cursor-not-allowed opacity-50 hover:opacity-50": orders.length === 0
+                        })} size="lg" type="submit" role="update account">Place Order</Button>
                     </section>
                 </section>
                 <section className="w-80">
-                    <CartComponent className="w-full">
-                        <CartOrder quantity={2} />
-                        <CartOrder quantity={2} />
+                    <CartComponent total={getTotal(orders)} className="w-full">
+                        {orders.map((order, index) => <CartOrder onIncrement={addToCart} onDecrement={reduceOrderQuantity} onRemove={removeFromCart} key={index} order={order} />)}
                     </CartComponent>
                 </section>
             </main>

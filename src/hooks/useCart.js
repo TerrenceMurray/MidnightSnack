@@ -8,6 +8,12 @@ const useCart = create((set) => ({
 	// 	quantity
 	// }[]
 
+	getTotal: (orders) => {
+		return 50 + orders.reduce(
+			(acc, order) => acc + order.item.price * order.quantity,
+			0
+		);
+	},
 	addItem: (item) =>
 		set((state) => {
 			// find if the item already exists
@@ -31,9 +37,10 @@ const useCart = create((set) => ({
 				(order) => order.item.id['item'] == itemID
 			);
 
-			if (state.orders[index].quantity > 1)
-				state.orders[index].quantity--;
-			else state.removeItem(itemID);
+			const order = state.orders[index];
+
+			if (order.quantity > 1) order.quantity--;
+			else state.removeItem(order.item.id['item']);
 
 			return { orders: [...state.orders] };
 		}),
@@ -41,7 +48,7 @@ const useCart = create((set) => ({
 		set((state) => {
 			// find if the item already exists
 			const index = state.orders.findIndex(
-				(order) => order.item.id['item'] == itemID
+				(order) => order.item.id['item'] == itemID['item']
 			);
 
 			state.orders.splice(index, 1);

@@ -23,7 +23,9 @@ export default function Restaurant ()
 
     const isActive = (id) => id === filter;
 
-    const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity } = useCart();
+    
+    const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity, getTotal } = useCart();
+    // console.log(getTotal());
     return (
         <main className="layout gap-x-8">
             <section className="flex gap-12 flex-col h-full row-span-full">
@@ -71,7 +73,7 @@ export default function Restaurant ()
                 </ScrollArea>
             </section>
             <section className="flex flex-col col-start-2 h-full row-span-full pb-12">
-                <Cart>
+                <Cart total={getTotal(orders)}>
                     {orders.map((order, index) => <CartOrder onIncrement={addToCart} onDecrement={reduceOrderQuantity} onRemove={removeFromCart} key={index} order={order} />)}
                 </Cart>
                 <Link className="mt-auto bg-accent-surface text-center text-button-text py-4 rounded-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:opacity-60 transition-opacity duration-75" to="/cart">Continue</Link>
