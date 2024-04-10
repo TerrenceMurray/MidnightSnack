@@ -7,9 +7,12 @@ import Cart from "@/components/shared/Cart";
 import CartOrder from "@/components/shared/CartOrder";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import useCart from "@/hooks/useCart";
 
 export default function Restaurant ()
 {
+    Title("Midnight Snacks - Sushi House");
+
     const { restaurant, categories, items } = useLoaderData();
     const [filter, setFilter] = useState(-1);
 
@@ -20,8 +23,7 @@ export default function Restaurant ()
 
     const isActive = (id) => id === filter;
 
-    Title("Midnight Snacks - Sushi House");
-
+    const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity } = useCart();
     return (
         <main className="layout gap-x-8">
             <section className="flex gap-12 flex-col h-full row-span-full">
@@ -63,15 +65,14 @@ export default function Restaurant ()
                 <ScrollArea className="flex-1">
                     <section className="flex flex-wrap gap-11">
                         {
-                            items.filter(item => filter === -1 || item.id.category === filter).map(item => <MenuItem key={item.id.item} item={item} />)
+                            items.filter(item => filter === -1 || item.id.category === filter).map(item => <MenuItem onClick={() => addToCart(item)} key={item.id.item} item={item} />)
                         }
                     </section>
                 </ScrollArea>
             </section>
             <section className="flex flex-col col-start-2 h-full row-span-full pb-12">
                 <Cart>
-                    <CartOrder quantity={2} />
-                    <CartOrder quantity={2} />
+                    {orders.map((order, index) => <CartOrder onIncrement={addToCart} onDecrement={reduceOrderQuantity} onRemove={removeFromCart} key={index} order={order} />)}
                 </Cart>
                 <Link className="mt-auto bg-accent-surface text-center text-button-text py-4 rounded-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:opacity-60 transition-opacity duration-75" to="/cart">Continue</Link>
             </section>
