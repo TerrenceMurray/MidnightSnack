@@ -29,7 +29,7 @@ const testData = [
 			3,
 			'Smoke House',
 			'10:00',
-			'00:00',
+			'23:30',
 			'Port of Spain',
 			'555-9012',
 			'restaurant3@example.com'
@@ -40,7 +40,7 @@ const testData = [
 			4,
 			'Pizza Plaza',
 			'11:00',
-			'01:00',
+			'23:59',
 			'St. Joseph',
 			'555-3456',
 			'restaurant4@example.com'

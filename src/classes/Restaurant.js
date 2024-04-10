@@ -22,12 +22,16 @@ export default class Restaurant {
 
 	static isOpen(opens_at, closes_at) {
 		const now = new Date();
-		const opens = new Date(now);
-		const closes = new Date(now);
+		
+		const opens = new Date();
+		const closes = new Date();
+
 		const [opensHours, opensMinutes] = opens_at.split(':');
 		const [closesHours, closesMinutes] = closes_at.split(':');
+
 		opens.setHours(opensHours, opensMinutes, 0, 0);
 		closes.setHours(closesHours, closesMinutes, 0, 0);
+
 		return now >= opens && now <= closes;
 	}
 }

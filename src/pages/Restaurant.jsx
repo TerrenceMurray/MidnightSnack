@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 
 export default function Restaurant ()
 {
-    const { restaurant, categories } = useLoaderData();
-    const [filter, setFilter] = useState("all");
+    const { restaurant, categories, items } = useLoaderData();
+    const [filter, setFilter] = useState(-1);
 
     const onFilterClick = (filter) =>
     {
@@ -39,21 +39,21 @@ export default function Restaurant ()
                             <Button variant="ghost" className={cn(
                                 "px-4 p-4 hover:opacity-75 transition-opacity duration-75",
                                 {
-                                    "bg-primary text-button-text hover:bg-primary": isActive("all"),
-                                    "bg-foreground hover:bg-foreground hover:text-secondary": !isActive("all"),
+                                    "bg-primary text-button-text hover:bg-primary": isActive(-1),
+                                    "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(-1),
                                 }
-                            )} onClick={() => onFilterClick("all")}>All</Button>
+                            )} onClick={() => onFilterClick(-1)}>All</Button>
                         </li>
                         {
                             categories.map(category => (
-                                <li key={category.id}>
+                                <li key={category.id.category}>
                                     <Button variant="ghost" className={cn(
                                         "px-4 p-4 hover:opacity-75 transition-opacity duration-75",
                                         {
-                                            "bg-primary text-button-text hover:bg-primary": isActive(category.id),
-                                            "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id),
+                                            "bg-primary text-button-text hover:bg-primary": isActive(category.id.category),
+                                            "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id.category),
                                         }
-                                    )} onClick={() => onFilterClick(category.id)}>{category.name}</Button>
+                                    )} onClick={() => onFilterClick(category.id.category)}>{category.name}</Button>
                                 </li>
                             ))
                         }
@@ -62,11 +62,9 @@ export default function Restaurant ()
 
                 <ScrollArea className="flex-1">
                     <section className="flex flex-wrap gap-11">
-                        <MenuItem />
-                        <MenuItem />
-                        <MenuItem />
-                        <MenuItem />
-                        <MenuItem />
+                        {
+                            items.filter(item => filter === -1 || item.id.category === filter).map(item => <MenuItem key={item.id.item} item={item} />)
+                        }
                     </section>
                 </ScrollArea>
             </section>
