@@ -18,7 +18,7 @@ export default function Restaurants ()
     {
         (debounce(() =>
         {
-            setRestaurants(filter(data, (restaurant) => restaurant.name.toLowerCase().includes(e.target.value.toLowerCase())));
+            setRestaurants(filter(data, (business) => business.restaurant.name.toLowerCase().includes(e.target.value.toLowerCase())));
         }, 200))();
     };
 
@@ -35,7 +35,7 @@ export default function Restaurants ()
                 </div>
                 <section className="mt-8 flex flex-wrap gap-9">
                     {
-                        restaurants.map(restaurant => <RestaurantCard key={restaurant.id} restaurant={restaurant} />)
+                        restaurants.map(business => <RestaurantCard key={business.restaurant.id} restaurant={business.restaurant} />)
                     }
                 </section>
             </section>

@@ -21,7 +21,7 @@ export default function RestaurantCard ({ restaurant })
                             Opening Hours
                         </div>
                         <span className={cn('ml-2 text-sm block text-button-text bg-accent-surface px-2 py-1 rounded-full', {
-                            "bg-red-500": Restaurant.isOpen(restaurant.opens_at, restaurant.closes_at),
+                            "bg-red-500": !Restaurant.isOpen(restaurant.opens_at, restaurant.closes_at),
                         })}>
                             {Restaurant.openingHours(restaurant.opens_at, restaurant.closes_at)}
                         </span>

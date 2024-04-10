@@ -4,6 +4,6 @@ export default class Category {
 			category: id,
 			restaurant: restaurant_id,
 		};
-		this.category = category;
+		this.name = category;
 	}
 }

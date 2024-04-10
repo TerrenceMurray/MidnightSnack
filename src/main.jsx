@@ -23,6 +23,7 @@ import Categories from '@/pages/settings/Categories';
 import MenuItems from '@/pages/settings/MenuItems';
 
 import RestaurantsLoader from '@/loaders/restaurants.loader.js';
+import RestaurantLoader from '@/loaders/restaurant.loader.js';
 
 export const router = createBrowserRouter([
     {
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
             {
                 path: 'restaurants/:id',
                 element: <Restaurant />,
+                loader: RestaurantLoader,
             },
             {
                 path: 'cart',

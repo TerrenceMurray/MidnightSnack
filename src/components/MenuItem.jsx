@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from '@/assets/pexels-pixabay-357756.jpg';
 
-export default function MenuItem ({onClick})
+export default function MenuItem ({ onClick })
 {
     return (
         <aside className='flex flex-col w-[15.125rem] cursor-pointer hover:opacity-60 duration-75 transition-opacity' onClick={onClick}>

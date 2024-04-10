@@ -1,20 +1,24 @@
 import Title from "@/components/Title";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import MenuItem from "@/components/MenuItem";
 import Cart from "@/components/shared/Cart";
 import CartOrder from "@/components/shared/CartOrder";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 export default function Restaurant ()
 {
-    const [filter, setFilter] = useState(null);
+    const { restaurant, categories } = useLoaderData();
+    const [filter, setFilter] = useState("all");
 
     const onFilterClick = (filter) =>
     {
-        console.log(filter);
+        setFilter(filter);
     };
+
+    const isActive = (id) => id === filter;
 
     Title("Midnight Snacks - Sushi House");
 
@@ -23,8 +27,8 @@ export default function Restaurant ()
             <section className="flex gap-12 flex-col h-full row-span-full">
                 <section className="flex flex-col gap-1">
                     <div className="items-center">
-                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity mr-2" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> Sushi House</h1>
-                        <h3 className="inline mx-4"><i className="bi bi-geo-alt-fill text-secondary"></i> Tunapuna</h3>
+                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity mr-2" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> {restaurant.name}</h1>
+                        <h3 className="inline mx-4"><i className="bi bi-geo-alt-fill text-secondary"></i> {restaurant.city}</h3>
                     </div>
                     <h2 className="subtitle">Add menu items to your cart</h2>
                 </section>
@@ -32,14 +36,27 @@ export default function Restaurant ()
                 <div className="flex flex-col gap-8 col-end-1">
                     <ul className="flex gap-4 flex-wrap">
                         <li>
-                            <Button className="px-4 p-4" onClick={() => onFilterClick(null)}>All</Button>
+                            <Button variant="ghost" className={cn(
+                                "px-4 p-4 hover:opacity-75 transition-opacity duration-75",
+                                {
+                                    "bg-primary text-button-text hover:bg-primary": isActive("all"),
+                                    "bg-foreground hover:bg-foreground hover:text-secondary": !isActive("all"),
+                                }
+                            )} onClick={() => onFilterClick("all")}>All</Button>
                         </li>
-                        <li>
-                            <Button className="px-4 p-4 bg-foreground text-secondary" onClick={() => onFilterClick("chicken")}>Chicken</Button>
-                        </li>
-                        <li>
-                            <Button className="px-4 p-4 bg-foreground text-secondary" onClick={() => onFilterClick("fish")}>Fish</Button>
-                        </li>
+                        {
+                            categories.map(category => (
+                                <li key={category.id}>
+                                    <Button variant="ghost" className={cn(
+                                        "px-4 p-4 hover:opacity-75 transition-opacity duration-75",
+                                        {
+                                            "bg-primary text-button-text hover:bg-primary": isActive(category.id),
+                                            "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id),
+                                        }
+                                    )} onClick={() => onFilterClick(category.id)}>{category.name}</Button>
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
 
