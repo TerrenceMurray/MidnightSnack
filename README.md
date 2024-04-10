@@ -2,7 +2,7 @@
 
 Welcome to Midnight Snacks, a convenient food delivery platform designed to satisfy your late-night cravings! This GitHub repository contains the source code for our web application.
 
-![Home](https://github.com/TerrenceMurray/MidnightSnack/assets/52611990/592fe76d-027d-4c55-8b26-284f4231c273)
+![Home](https://github.com/TerrenceMurray/MidnightSnack/assets/52611990/b6f02902-f22e-4a04-85f1-58c30c91a9b0)
 
 ### Features
 
