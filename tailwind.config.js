@@ -77,8 +77,8 @@ module.exports = {
 					surface: 'var(--surface-accent)',
 				},
 				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))',
+					DEFAULT: 'var(--surface-primary)',
+					foreground: 'var(--text-primary)',
 				},
 				card: {
 					DEFAULT: 'hsl(var(--card))',

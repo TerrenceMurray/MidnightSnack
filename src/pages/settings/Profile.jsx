@@ -1,10 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from '@/services/useSupabase.service';
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 
+import { useAuth } from "@/hooks/useAuth";
+
 export default function Profile ()
 {
+    const { user } = useAuth();
+
     const {
         register,
         handleSubmit,
@@ -27,6 +32,11 @@ export default function Profile ()
         if (!isDirty) return;
         console.log(JSON.stringify(data));
     };
+
+    const handleSignOut = async () =>
+    {
+        const { error } = await supabase.auth.signOut();
+    }
 
     return (
         <>
@@ -96,7 +106,7 @@ export default function Profile ()
                         <Button className={cn("hover:opacity-75 transition-opacity duration-75", {
                             "cursor-not-allowed opacity-50 hover:opacity-50": !isDirty
                         })} size="lg" type="submit" role="update account">Update account</Button>
-                        <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" type="button" role="sign out of account">Sign Out</Button>
+                        <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" onClick={handleSignOut} variant="destructive" type="button" role="sign out of account">Sign Out</Button>
                     </div>
                 </form>
             </section>

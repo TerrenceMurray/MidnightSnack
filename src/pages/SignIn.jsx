@@ -1,21 +1,34 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { supabase } from "@/services/useSupabase.service";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { Link } from "react-router-dom";
 
 export default function SignIn ()
 {
     return (
-        <div className='md:flex md:justify-center'>
-            <div className='flex-col prose mt-7'>
-                <h1>Log in to your app!</h1>
-                <div className='items-center justify-center mx-12'>
+        <main className='w-full flex justify-center'>
+            <aside className='flex-col mt-7 w-96 flex'>
+                <h1 className="text-2xl text-center font-bold">Sign into your account</h1>
+                <div className='items-center justify-center'>
                     <Auth
                         supabaseClient={supabase}
                         appearance={{ theme: ThemeSupa }}
-                        providers={['google']}
+                        providers={[]}
+                        localization={{
+                            variables: {
+                                sign_in: {
+                                    email_label: 'Email Address',
+                                    password_label: 'Password',
+                                },
+                            },
+                        }}
+                        showLinks={false}
+                        view="sign_in"
+                        redirectTo="/signin"
                     />
                 </div>
-            </div>
-        </div>
+                <Link to="/signup" className="text-center text-primary">Don't have an account? Sign up here</Link>
+            </aside>
+        </main>
     );
 }

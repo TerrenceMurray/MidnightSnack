@@ -11,10 +11,11 @@ import useCart from "@/hooks/useCart";
 
 export default function Restaurant ()
 {
-    Title("Midnight Snacks - Sushi House");
-
+    
     const { restaurant, categories, items } = useLoaderData();
     const [filter, setFilter] = useState(-1);
+    
+    Title(`Midnight Snacks - ${restaurant.name}`);
 
     const onFilterClick = (filter) =>
     {

@@ -15,11 +15,10 @@ export default function Restaurant ()
     } = useForm({
         // TODO: Fetch user data from the API
         defaultValues: {
-            cover: "picture.png",
-            name: "Name e.g. Sushi House",
-            address: "Address e.g. St. Augustine, Tunapuna",
-            phone: "Phone Number e.g. +1-868-000-0000 ",
-            email: "Email Address e.g. sushihub@gmail.com"
+            name: "",
+            address: "",
+            phone: "",
+            email: ""
         }
     });
 
@@ -31,79 +30,88 @@ export default function Restaurant ()
 
     return (
         <>
-            <section className="flex flex-col gap-1 mb-8 py-8">
+            <section className="flex flex-col gap-1 mb-8">
                 <section className="flex flex-col gap-1">
                     <h1 className="title">Restaurant</h1>
                     <h2 className="subtitle">Update your restaurant settings</h2>
                 </section>
             </section>
             <section>
-                <form className= "flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
-                <div class="flex gap-8 items-end" >
-                    <input type= "cover" id="fileCover" className={cn("bg-foreground placeholder:text-secondary rounded-[16px] w-20 aspect-square ")}/>
-                    <div className="flex flex-col w-3/4 ">
-                        <label className= "txt-sm py-2" htmlFor="cover" >Cover</label>
-                        <Input type="text" 
-                        id="title"
-                        className={cn("bg-foreground placeholder:text-secondary p-6 ")}
-                        placeholder= "Choose a file"
-                        />
-                        {errors.cover && <span className="text-sm text-red-600">{errors.cover.message}</span>}
-                        
+                <form className="flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex gap-8 items-end" >
+                        <div type="cover" id="fileCover" className={cn("bg-foreground placeholder:text-secondary rounded-lg w-20 aspect-square ")}></div>
+                        <div className="flex flex-col w-3/4 ">
+                            <label className="text-sm py-2" htmlFor="cover" >Cover</label>
+                            <Input
+                                type="file"
+                                id="file"
+                                className={cn("bg-foreground placeholder:text-secondary h-auto py-3 px-4 ")}
+                                placeholder="Choose a file"
+                            />
+                            {errors.cover && <span className="text-sm text-red-600">{errors.cover.message}</span>}
+
                         </div>
                     </div>
-
-                    <div>
-                    <label className= "txt-sm" htmlFor="name" >Name</label>
-                        <Input type="text" 
-                        id="name"
-                        className={cn("bg-foreground placeholder:text-secondary p-6 ")}
-                        placeholder= "Name e.g. Sushi House"
-                        {...register("name", {
-                            required: {
-                                value: true,
-                                message: "Name of restaurant is required."
-                            },
-                            minLength: {
-                                value: 2,
-                                message: "Name of restaurant must be at least 2 characters long."
-                            }
-                        })}
+                    <div className="gap-2 flex flex-col w-full">
+                        <label className="text-sm" htmlFor="name" >Name</label>
+                        <Input type="text"
+                            id="name"
+                            className={cn("bg-foreground placeholder:text-secondary p-6 ")}
+                            placeholder="Name e.g. Sushi House"
+                            {...register("name", {
+                                required: {
+                                    value: true,
+                                    message: "Name of restaurant is required."
+                                },
+                                minLength: {
+                                    value: 2,
+                                    message: "Name of restaurant must be at least 2 characters long."
+                                }
+                            })}
                         />
-                       
+
                         {errors.name && <span className="text-sm text-red-600">{errors.name.message}</span>}
                     </div>
 
-                    <div>
-                    <label className= "txt-sm" htmlFor="address" >Address</label>
-                        <Input type="text" 
-                        id="address"
-                        className={cn("bg-foreground placeholder:text-secondary p-6 ")}
-                        placeholder= "Address e.g. St. Augustine, Tunapuna"
-                        {...register("address", {
-                            required: {
-                                value: true,
-                                message: "Address of restaurant is required."
-                            },
-                            minLength: {
-                                value: 2,
-                                message: "Address of restaurant must be at least 2 characters long."
-                            }
-                        })}
+                    <div className="gap-2 flex flex-col w-full">
+                        <label className="text-sm" htmlFor="address" >Address</label>
+                        <Input type="text"
+                            id="address"
+                            className={cn("bg-foreground placeholder:text-secondary p-6 ")}
+                            placeholder="Address e.g. St. Augustine, Tunapuna"
+                            {...register("address", {
+                                required: {
+                                    value: true,
+                                    message: "Address of restaurant is required."
+                                },
+                                minLength: {
+                                    value: 2,
+                                    message: "Address of restaurant must be at least 2 characters long."
+                                }
+                            })}
                         />
 
                         {errors.address && <span className="text-sm text-red-600">{errors.address.message}</span>}
                     </div>
-                    
+
                     <div className="flex justify-between w-full gap-8">
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="phone">Phone Number</label>
-                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")} type="tel" placeholder="Phone Number e.g +1 868 000 0000" id="phone" {...register("phone", { required: true })} />
+                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                type="tel"
+                                placeholder="Phone Number e.g +1 868 000 0000"
+                                id="phone" {...register("phone", {
+                                    required: true
+                                })} />
                             {errors.phone && <span className="text-sm text-red-600">This field is required.</span>}
                         </div>
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="email">Email Address</label>
-                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")} type="email" placeholder="Email Address e.g. tj12@gmail.com" id="email" {...register("email", { required: true })} />
+                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                type="email"
+                                placeholder="Email Address e.g. tj12@gmail.com"
+                                id="email"
+                                {...register("email", { required: true })} />
                             {errors.email && <span className="text-sm text-red-600">This field is required.</span>}
                         </div>
                     </div>
