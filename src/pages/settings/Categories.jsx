@@ -16,7 +16,7 @@ export default function Categories ()
     } = useForm({
         // TODO: Fetch user data from the API
         defaultValues: {
-            title: "Title eg: Chicken",
+            title: "Chicken",
             search: "Search",
            
         }
