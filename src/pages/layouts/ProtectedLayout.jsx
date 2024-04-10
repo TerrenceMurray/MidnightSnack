@@ -5,8 +5,8 @@ export default function ProtectedLayout ({ children })
 {
     const { user } = useAuth();
 
-    if (!user)
-        return <Navigate to="/signin" replace />;
+    // if (!user)
+    //     return <Navigate to="/signin" replace />;
 
     return (
         <>{children}</>
