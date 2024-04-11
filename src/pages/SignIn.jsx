@@ -27,7 +27,7 @@ export default function SignIn ()
                         redirectTo="/signin"
                     />
                 </div>
-                <Link to="/signup" className="text-center text-primary">Don't have an account? Sign up here</Link>
+                <Link to="/signup" className="text-center text-primary">Don&apost have an account? Sign up here</Link>
             </aside>
         </main>
     );
