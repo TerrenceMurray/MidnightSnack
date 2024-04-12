@@ -4,6 +4,7 @@ import { APIProvider } from "@vis.gl/react-google-maps";
 import { SessionContext } from "./context/sessionContext";
 import { useState, useEffect } from "react";
 import { supabase } from "./client/supabase";
+import { Toaster } from "./components/ui/toaster";
 
 export default function Root ()
 {
@@ -29,6 +30,7 @@ export default function Root ()
                     <Outlet />
                 </SessionContext.Provider>
             </APIProvider>
+            <Toaster />
         </Layout>
     );
 }

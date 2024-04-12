@@ -1,23 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { supabase } from "@/client/supabase";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import Title from "@/components/Title";
 
 export default function Profile ()
 {
+    Title("Midnight Snack - Profile");
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: {
             errors,
             isDirty
         }
     } = useForm({
-        // TODO: Fetch user data from the API
         defaultValues: async () =>
         {
             const { data: { user } } = await supabase.auth.getUser();
@@ -35,18 +41,58 @@ export default function Profile ()
         try
         {
             const { error } = await supabase.auth.signOut();
+
+            if (error)
+                throw error;
+
             navigate("/");
-            if (error) throw error;
         } catch (error)
         {
-            console.error(error.message);
+            setError(error.message || error.error_description);
+            setIsLoading(false);
         }
     };
 
-    const onSubmit = (data) =>
+    const onSubmit = async (data) =>
     {
         if (!isDirty) return;
-        console.log(JSON.stringify(data));
+        try
+        {
+            setIsLoading(true);
+            const { data: { error } } = await supabase.auth.updateUser({
+                email: data.email,
+                data: {
+                    fname: data.fname,
+                    lname: data.lname,
+                    phone: data.phone
+                }
+            });
+
+            reset({
+                fname: data.fname,
+                lname: data.lname,
+                phone: data.phone,
+                email: data.email
+            });
+
+            if (error)
+                throw error;
+
+            toast({
+                title: "Account updated successfully.",
+                message: "Your account has been updated successfully.",
+                type: "success"
+            });
+
+
+
+            setIsLoading(false);
+
+        } catch (error)
+        {
+            setError(error.message || error.error_description);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -59,6 +105,7 @@ export default function Profile ()
             </section>
             <section className="w-full">
                 <form className="flex flex-col gap-6 w-[40rem]" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                    {error && <span className="text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
                     <div className="flex justify-between w-full gap-8">
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="fname">First Name</label>
@@ -142,7 +189,9 @@ export default function Profile ()
                         </div>
                     </div>
                     <div className="mt-6 flex gap-6">
-                        <Button disabled={!isDirty} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">Update account</Button>
+                        <Button disabled={!isDirty} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
+                            {isLoading ? "Loading..." : "Update account"}
+                        </Button>
                         <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" onClick={handleSignOut} type="button" role="sign out of account">Sign Out</Button>
                     </div>
                 </form>
