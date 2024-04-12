@@ -63,7 +63,7 @@ export default function SignUp ()
                 </section>
                 <div className="items-center justify-center">
                     <form className="flex flex-col w-full gap-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                        {error && <span className="text-red-500 text-sm">{error}</span>}
+                        {error && <span className="text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
                         <div className="flex gap-4">
                             <div className="flex flex-col gap-2 w-full">
                                 <label htmlFor="fname" className="text-sm">First Name</label>
@@ -186,10 +186,10 @@ export default function SignUp ()
                                 {errors.cpassword && <span className="text-red-500 text-sm">{errors.cpassword.message}</span>}
                             </div>
                         </div>
-                        <Button variant="cta" size="lg" className="mt-6 py-6" type="submit">Create account</Button>
+                        <Button disabled={!isDirty} variant="cta" size="lg" className="mt-6 py-6" type="submit">Create account</Button>
                     </form>
                 </div>
-                <Link to="/signin" className="text-center text-primary underline text-sm mt-4 hover:text-secondary">
+                <Link to="/signin"  className="text-center text-primary underline text-sm mt-4 hover:text-secondary">
                     Already have an account? Sign in here
                 </Link>
             </aside>
