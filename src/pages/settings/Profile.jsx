@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Profile ()
 {
     const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -17,11 +18,15 @@ export default function Profile ()
         }
     } = useForm({
         // TODO: Fetch user data from the API
-        defaultValues: {
-            fname: "Terrence",
-            lname: "Murray",
-            phone: "+1-868-721-6166",
-            email: "mterrence891@gmail.com"
+        defaultValues: async () =>
+        {
+            const { data: { user } } = await supabase.auth.getUser();
+            return {
+                fname: user.user_metadata.fname,
+                lname: user.user_metadata.lname,
+                phone: user.user_metadata.phone,
+                email: user.email
+            };
         }
     });
 
@@ -53,23 +58,23 @@ export default function Profile ()
                 </section>
             </section>
             <section className="w-full">
-                <form className="flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col gap-6 w-[40rem]" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex justify-between w-full gap-8">
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="fname">First Name</label>
                             <Input
                                 type="text"
                                 id="fname"
-                                className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                className="bg-foreground placeholder:text-secondary p-6"
                                 placeholder="First Name e.g. Mark"
                                 {...register("fname", {
                                     required: {
                                         value: true,
-                                        message: "First name is required."
+                                        message: "This field is required."
                                     },
                                     minLength: {
                                         value: 2,
-                                        message: "First name must be at least 2 characters long."
+                                        message: "Must be at least 2 characters long."
                                     }
                                 })}
                             />
@@ -80,16 +85,16 @@ export default function Profile ()
                             <Input
                                 type="text"
                                 id="lname"
-                                className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                className="bg-foreground placeholder:text-secondary p-6"
                                 placeholder="Last Name e.g. Smart"
                                 {...register("lname", {
                                     required: {
                                         value: true,
-                                        message: "Last name is required."
+                                        message: "This field is required."
                                     },
                                     minLength: {
                                         value: 2,
-                                        message: "Last name must be at least 2 characters long."
+                                        message: "Must be at least 2 characters long."
                                     }
                                 })}
                             />
@@ -99,19 +104,45 @@ export default function Profile ()
                     <div className="flex justify-between w-full gap-8">
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="phone">Phone Number</label>
-                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")} type="tel" placeholder="Phone Number e.g +1 868 000 0000" id="phone" {...register("phone", { required: true })} />
+                            <Input className="bg-foreground placeholder:text-secondary p-6"
+                                id="phone"
+                                placeholder="Phone Number e.g +1 868 000 0000"
+                                type="tel"
+                                {...register("phone",
+                                    {
+                                        required: {
+                                            value: true,
+                                            message: "This field is required.",
+                                        },
+                                        pattern: {
+                                            value: /^(?:\+?\d{1,3}[-. ]?)?\(?(?:\d{3})\)?[-. ]?\d{3}[-. ]?\d{4}$/,
+                                            message: "Phone number is not valid.",
+                                        }
+                                    }
+                                )} />
                             {errors.phone && <span className="text-sm text-red-600">This field is required.</span>}
                         </div>
                         <div className="gap-2 flex flex-col w-full">
                             <label className="text-sm" htmlFor="email">Email Address</label>
-                            <Input className={cn("bg-foreground placeholder:text-secondary p-6")} type="email" placeholder="Email Address e.g. tj12@gmail.com" id="email" {...register("email", { required: true })} />
+                            <Input className="bg-foreground placeholder:text-secondary p-6"
+                                id="email"
+                                type="email"
+                                placeholder="Email Address e.g. tj12@gmail.com"
+                                {...register("email", {
+                                    required: {
+                                        value: true,
+                                        message: "This field is required.",
+                                    },
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Email address is not valid.",
+                                    },
+                                })} />
                             {errors.email && <span className="text-sm text-red-600">This field is required.</span>}
                         </div>
                     </div>
                     <div className="mt-6 flex gap-6">
-                        <Button className={cn("hover:opacity-75 transition-opacity duration-75", {
-                            "cursor-not-allowed opacity-50 hover:opacity-50": !isDirty
-                        })} size="lg" type="submit" role="update account">Update account</Button>
+                        <Button disabled={!isDirty} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">Update account</Button>
                         <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" onClick={handleSignOut} type="button" role="sign out of account">Sign Out</Button>
                     </div>
                 </form>

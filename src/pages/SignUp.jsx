@@ -43,11 +43,11 @@ export default function SignUp ()
             const { error } = await supabase.auth.signUp({
                 email: formData.email,
                 password: formData.password,
-                phone: formData.phone,
                 options: {
                     data: {
                         fname: formData.fname,
                         lname: formData.lname,
+                        phone: formData.phone,
                     },
                 },
             });

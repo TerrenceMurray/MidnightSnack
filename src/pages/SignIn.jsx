@@ -59,7 +59,7 @@ export default function SignIn ()
                     <h2 className="subtitle text-center">Please fill all of the fields below.</h2>
                 </section>
                 <div className="items-center justify-center">
-                    <form className="flex flex-col w-full gap-4" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="flex flex-col w-full gap-4" autoComplete="on" onSubmit={handleSubmit(onSubmit)}>
                         {error && <span className="text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
                         <div className="flex flex-col gap-2">
                             <label htmlFor="email" className="text-sm">Email Address</label>
