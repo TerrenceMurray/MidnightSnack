@@ -3,7 +3,7 @@ import CartComponent from "@/components/shared/Cart";
 import CartOrder from "@/components/shared/CartOrder";
 import { Button } from "@/components/ui/button";
 import { Map, AdvancedMarker, Pin, useMap } from "@vis.gl/react-google-maps";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useCart from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
 import Title from "@/components/Title";
@@ -24,7 +24,8 @@ import
     PopoverTrigger,
 } from "@/components/ui/popover";
 import axios from "axios";
-
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
 
 async function getCities ()
 {
@@ -33,6 +34,21 @@ async function getCities ()
 
 export default function Cart ()
 {
+    const {
+        register,
+        handleSubmit,
+        formState: {
+            errors,
+            isDirty
+        }
+    } = useForm({
+        defaultValues: {
+            fname: "",
+            lname: "",
+            phone: "",
+        }
+    });
+
     const [position, setPosition] = useState({ lat: 10.6549, lng: -61.5019 });
     const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity, getTotal } = useCart();
     const [cities, setCities] = useState([]);
@@ -41,16 +57,23 @@ export default function Cart ()
     const [value, setValue] = useState("");
     const map = useMap();
 
+    const formRef = useRef(null);
+
     Title(`Midnight Snacks - Cart`);
+
+    const onSubmit = (data) =>
+    {
+        if (!isDirty) return;
+        const order = { ...data, orders };
+        // TODO: Send order to the API
+
+    };
 
     const onPlaceOrder = () =>
     {
         if (value === "" || orders.length === 0) return;
-        console.log(JSON.stringify({
-            city: value,
-            orders,
-            location: position
-        }));
+
+        handleSubmit(onSubmit)();
     };
 
     useEffect(() =>
@@ -86,27 +109,83 @@ export default function Cart ()
     }, [map]);
 
     return (
-        <main className="flex gap-10 justify-center w-full h-full pb-12 max-h-screen">
-            <section>
+        <main className="flex gap-10 justify-center w-full pb-12">
+            <section className="w-1/2">
                 <section className="flex flex-col gap-1">
                     <h1 className="title">Checkout</h1>
                     <h2 className="subtitle">Confirm your information to proceed with checkout</h2>
                 </section>
-                <section className="flex flex-col mt-12 gap-8">
+                <section className="flex flex-col mt-12 gap-6">
+                    <form className="flex flex-col gap-6" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex justify-between w-full gap-8">
+                            <div className="gap-2 flex flex-col w-full">
+                                <label className="text-sm" htmlFor="fname">First Name</label>
+                                <Input
+                                    type="text"
+                                    id="fname"
+                                    className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                    placeholder="First Name e.g. Mark"
+                                    {...register("fname", {
+                                        required: {
+                                            value: true,
+                                            message: "This field is required."
+                                        },
+                                        minLength: {
+                                            value: 2,
+                                            message: "Must be at least 2 characters long."
+                                        }
+                                    })}
+                                />
+                                {errors.fname && <span className="text-sm text-red-600">{errors.fname.message}</span>}
+                            </div>
+                            <div className="gap-2 flex flex-col w-full">
+                                <label className="text-sm" htmlFor="lname">Last Name</label>
+                                <Input
+                                    type="text"
+                                    id="lname"
+                                    className={cn("bg-foreground placeholder:text-secondary p-6")}
+                                    placeholder="Last Name e.g. Smart"
+                                    {...register("lname", {
+                                        required: {
+                                            value: true,
+                                            message: "This field is required."
+                                        },
+                                        minLength: {
+                                            value: 2,
+                                            message: "Must be at least 2 characters long."
+                                        }
+                                    })}
+                                />
+                                {errors.lname && <span className="text-sm text-red-600">{errors.lname.message}</span>}
+                            </div>
+                        </div>
+                        <div className="gap-2 flex flex-col w-full">
+                            <label className="text-sm" htmlFor="phone">Phone Number</label>
+                            <Input className="bg-foreground placeholder:text-secondary p-6" type="tel"
+                                id="phone"
+                                placeholder="Phone Number e.g +1 868 000 0000"
+                                {...register("phone", { required: true, })}
+                            />
+                            {errors.phone && <span className="text-sm text-red-600">This field is required.</span>}
+                        </div>
+                    </form>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={open}
-                                className="w-full bg-foreground hover:bg-foreground hover:opacity-75 transition-opacity relative h-auto py-4 pl-14 justify-between "
-                            >
-                                <i className="bi bi-geo-alt-fill absolute top-1/2 -translate-y-1/2 left-8 text-base text-secondary"></i>
-                                {value
-                                    ? cities[value].city
-                                    : "Select a city e.g. Port of Spain"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
+                            <div>
+                                <p className="mb-2 text-sm text-secondary">Place a pin at your delivery address</p>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    className="w-full bg-foreground hover:bg-foreground hover:opacity-75 transition-opacity relative h-auto py-4 pl-14 justify-between "
+                                >
+                                    <i className="bi bi-geo-alt-fill absolute top-1/2 -translate-y-1/2 left-8 text-base text-secondary"></i>
+                                    {value
+                                        ? cities[value].city
+                                        : "Select a city e.g. Port of Spain"}
+                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                            </div>
                         </PopoverTrigger>
                         <PopoverContent className="">
                             <Command>
@@ -150,7 +229,7 @@ export default function Cart ()
                         </PopoverContent>
                     </Popover>
                     <Map
-                        className="w-full min-h-72 h-full rounded-lg outline-none"
+                        className="w-full min-h-72 rounded-lg outline-none"
                         defaultCenter={position}
                         draggableCursor={'default'}
                         defaultZoom={16}
@@ -164,9 +243,13 @@ export default function Cart ()
                             <Pin />
                         </AdvancedMarker>
                     </Map>
-                    <Button variant="cta" onClick={onPlaceOrder} className={cn("hover:opacity-75 transition-opacity duration-75 w-full py-8", {
-                        "cursor-not-allowed opacity-50 hover:opacity-50": orders.length === 0
-                    })} size="lg" type="submit" role="update account">Place Order</Button>
+                    <Button
+                        variant="cta"
+                        type="submit" disabled={orders.length === 0 || !isDirty || value === ""}
+                        onClick={onPlaceOrder} className="hover:opacity-75 transition-opacity duration-75 w-full py-8"
+                        size="lg"
+                        role="Place order"
+                    >Place Order</Button>
                 </section>
             </section>
             <section className="w-80">

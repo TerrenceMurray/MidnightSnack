@@ -9,7 +9,7 @@
 		--surface-secondary: theme(colors.white.300);
 		--surface-accent: theme(colors.green.400);
 		--surface-destructive: theme(colors.red.50);
-		
+
 		--text-primary: theme(colors.white.950);
 		--text-secondary: theme(colors.white.600);
 		--text-accent: theme(colors.green.400);
@@ -74,6 +74,10 @@
 
 	#root {
 		@apply w-full h-full flex flex-col max-w-[85rem] mx-auto px-32;
+	}
+
+	.no-scroll {
+		height: calc(100vh - 6rem);
 	}
 
 	.layout {
