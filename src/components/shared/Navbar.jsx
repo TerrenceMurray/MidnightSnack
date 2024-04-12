@@ -1,9 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import CartButton from "../CartButton";
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 export default function Navbar ()
 {
@@ -32,13 +33,9 @@ export default function Navbar ()
             </ul>
             <div className="flex gap-6">
                 <CartButton />
-                <NavLink to="/settings/1/profile"> {/* TODO Add user id to settings profile */}
-                    <Avatar className="rounded-lg">
-                        <AvatarFallback className="text-secondary bg-foreground rounded-lg">
-                            TM
-                        </AvatarFallback>
-                    </Avatar>
-                </NavLink>
+                <Link to="/signin">
+                    Sign In
+                </Link>
             </div>
         </nav>
     );

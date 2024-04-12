@@ -2,7 +2,7 @@ import './index.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AuthProvider from './providers/AuthProvider';
+// import AuthProvider from './providers/AuthProvider';
 // import { router } from './routes';
 import { RouterProvider } from 'react-router-dom';
 
@@ -93,8 +93,6 @@ export const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
 
     <React.StrictMode>
-        <AuthProvider>
-            <RouterProvider router={router} />
-        </AuthProvider>
+        <RouterProvider router={router} />
     </React.StrictMode>,
 );
