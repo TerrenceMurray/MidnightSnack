@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
+import { supabase } from "@/client/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile ()
 {
-
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -22,6 +24,19 @@ export default function Profile ()
             email: "mterrence891@gmail.com"
         }
     });
+
+    const handleSignOut = async () =>
+    {
+        try
+        {
+            const { error } = await supabase.auth.signOut();
+            navigate("/");
+            if (error) throw error;
+        } catch (error)
+        {
+            console.error(error.message);
+        }
+    };
 
     const onSubmit = (data) =>
     {
@@ -97,7 +112,7 @@ export default function Profile ()
                         <Button className={cn("hover:opacity-75 transition-opacity duration-75", {
                             "cursor-not-allowed opacity-50 hover:opacity-50": !isDirty
                         })} size="lg" type="submit" role="update account">Update account</Button>
-                        <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" type="button" role="sign out of account">Sign Out</Button>
+                        <Button className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" onClick={handleSignOut} type="button" role="sign out of account">Sign Out</Button>
                     </div>
                 </form>
             </section>

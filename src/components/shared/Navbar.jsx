@@ -1,13 +1,32 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import CartButton from "../CartButton";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "@/client/supabase";
+import UserInformation from "@/classes/UserInformation";
+
 
 export default function Navbar ()
 {
+    const [user, setUser] = useState(null);
+
+    useEffect(() =>
+    {
+        supabase.auth.getUser().then(({ data: { user } }) =>
+        {
+            setUser(user);
+        });
+
+        supabase.auth.onAuthStateChange((_event, session) =>
+        {
+            setUser(session?.user ?? null);
+        });
+    }, []);
+
     const isActiveLink = ({ isActive }) => cn(
         "hover:text-accent hover:opacity-100 transition-all ease-in-out",
         {
@@ -31,11 +50,21 @@ export default function Navbar ()
                 <li><NavLink aria-label="Go to home page" className={isActiveLink} to="/">Home</NavLink></li>
                 <li><NavLink aria-label="Go to restaurants page" className={isActiveLink} to="/restaurants">Restaurants</NavLink></li>
             </ul>
-            <div className="flex gap-6">
+            <div className="flex gap-6 items-center">
                 <CartButton />
-                <Link to="/signin">
-                    Sign In
-                </Link>
+                {/* TODO Add user id to settings profile */}
+
+                {user === null ?
+                    <Link className="hover:text-secondary text-sm" to="/signin">Sign In</Link>
+                    :
+                    <NavLink to="/settings/1/profile">
+                        <Avatar className="rounded-lg">
+                            <AvatarFallback className="text-secondary bg-foreground rounded-lg">
+                                {UserInformation.getInitials(user.user_metadata.fname, user.user_metadata.lname)}
+                            </AvatarFallback>
+                        </Avatar>
+                    </NavLink>
+                }
             </div>
         </nav>
     );

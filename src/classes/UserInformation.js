@@ -1,20 +1,9 @@
 export default class UserInformation {
-	constructor(id, restaurant_id, fname, lname, email, phone) {
-		this.id = {
-			user: id,
-			restaurant: restaurant_id,
-		};
-		this.fname = fname;
-		this.lname = lname;
-		this.email = email;
-		this.phone = phone;
+	static getFullName(fname, lname) {
+		return `${fname} ${lname}`;
 	}
 
-	getFullName() {
-		return `${this.fname} ${this.lname}`;
-	}
-
-	getInitials() {
-		return `${this.fname.charAt(0)}${this.lname.charAt(0)}`;
+	static getInitials(fname, lname) {
+		return `${fname.charAt(0)}${lname.charAt(0)}`;
 	}
 }

@@ -4,53 +4,50 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Title from "@/components/Title";
 import { supabase } from "@/client/supabase";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { SessionContext } from "@/context/sessionContext";
 
 export default function SignIn ()
 {
     Title("Midnight Snack - Sign In");
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const session = useContext(SessionContext);
 
     const {
         register,
         handleSubmit,
-        getValues,
         formState: { errors, isDirty },
     } = useForm({
         defaultValues: {
-            fname: "",
-            lname: "",
             email: "",
-            phone: "",
             password: "",
-            cpassword: "",
         },
     });
+
+    if (session !== null)
+        return <Navigate to="/" />;
 
     const onSubmit = async (formData) =>
     {
         try
         {
-            // const { data, error } = await supabase.auth.signUp({
-            //     email: formData.email,
-            //     password: formData.password,
-            //     phone: formData.phone,
-            //     options: {
-            //         data: {
-            //             fname: formData.fname,
-            //             lname: formData.lname,
-            //         },
-            //     },
-            // });
+            setIsLoading(true);
+
+            const { error } = await supabase.auth.signInWithPassword({
+                email: formData.email,
+                password: formData.password,
+            });
 
             if (error)
-            {
-                setError(error.message);
-                return;
-            }
+                throw error;
+
+            setIsLoading(false);
         } catch (error)
         {
-            console.error(error);
+            setIsLoading(false);
+            setError(error.message || error.error_description);
         }
     };
 
@@ -74,11 +71,7 @@ export default function SignIn ()
                                     required: {
                                         value: true,
                                         message: "This field is required.",
-                                    },
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: "Email address is not valid.",
-                                    },
+                                    }
                                 })}
                                 className="bg-foreground placeholder:text-secondary p-6"
                             />
@@ -94,21 +87,19 @@ export default function SignIn ()
                                     required: {
                                         value: true,
                                         message: "This field is required.",
-                                    },
-                                    minLength: {
-                                        value: 6,
-                                        message: "Must be at least 6 characters long.",
-                                    },
+                                    }
                                 })}
                                 className="bg-foreground placeholder:text-secondary p-6"
                             />
                             {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                         </div>
-                        <Button disabled={!isDirty} variant="cta" size="lg" className="mt-6 py-6" type="submit">Sign In</Button>
+                        <Button disabled={!isDirty || isLoading} variant="cta" size="lg" className="mt-6 py-6" type="submit">
+                            {isLoading ? "Loading..." : "Sign In"}
+                        </Button>
                     </form>
                 </div>
                 <Link to="/signup" className="text-center text-primary underline text-sm mt-4 hover:text-secondary">
-                    Don't have an account? Sign up here
+                    {"Don't have an account? Sign up here"}
                 </Link>
             </aside>
         </main>

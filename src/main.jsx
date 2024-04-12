@@ -61,6 +61,7 @@ export const router = createBrowserRouter([
             {
                 path: 'settings/:id',
                 element: <Settings />,
+                
                 children: [
                     {
                         index: true,

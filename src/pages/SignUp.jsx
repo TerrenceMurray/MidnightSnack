@@ -4,13 +4,17 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Title from "@/components/Title";
 import { supabase } from "@/client/supabase";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { SessionContext } from "@/context/sessionContext";
 
 export default function SignUp ()
 {
     Title("Midnight Snack - Sign Up");
-    const [error, setError] = useState("");
 
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const session = useContext(SessionContext);
     const {
         register,
         handleSubmit,
@@ -27,11 +31,16 @@ export default function SignUp ()
         },
     });
 
+    if (session !== null)
+        return <Navigate to="/" />;
+
+
     const onSubmit = async (formData) =>
     {
         try
         {
-            const { data, error } = await supabase.auth.signUp({
+            setIsLoading(true);
+            const { error } = await supabase.auth.signUp({
                 email: formData.email,
                 password: formData.password,
                 phone: formData.phone,
@@ -44,13 +53,14 @@ export default function SignUp ()
             });
 
             if (error)
-            {
-                setError(error.message);
-                return;
-            }
+                throw error;
+
+            setIsLoading(false);
+
         } catch (error)
         {
-            console.error(error);
+            setIsLoading(false);
+            setError(error.message || error.error_description);
         }
     };
 
@@ -58,7 +68,7 @@ export default function SignUp ()
         <main className="w-full flex justify-center pb-12">
             <aside className="flex-col mt-7 w-5/12 flex">
                 <section className="pb-8">
-                    <h1 className="title text-center">Create a new account</h1>
+                    <h1 className="title text-center">Create a new business account</h1>
                     <h2 className="subtitle text-center">Please fill all of the fields below.</h2>
                 </section>
                 <div className="items-center justify-center">
@@ -68,7 +78,6 @@ export default function SignUp ()
                             <div className="flex flex-col gap-2 w-full">
                                 <label htmlFor="fname" className="text-sm">First Name</label>
                                 <Input
-                                    autocomplete={false}
                                     id="fname"
                                     placeholder="First Name e.g. Mark"
                                     type="text"
@@ -186,10 +195,12 @@ export default function SignUp ()
                                 {errors.cpassword && <span className="text-red-500 text-sm">{errors.cpassword.message}</span>}
                             </div>
                         </div>
-                        <Button disabled={!isDirty} variant="cta" size="lg" className="mt-6 py-6" type="submit">Create account</Button>
+                        <Button disabled={!isDirty || isLoading} variant="cta" size="lg" className="mt-6 py-6" type="submit">
+                            {isLoading ? "Loading..." : "Create account"}
+                        </Button>
                     </form>
                 </div>
-                <Link to="/signin"  className="text-center text-primary underline text-sm mt-4 hover:text-secondary">
+                <Link to="/signin" className="text-center text-primary underline text-sm mt-4 hover:text-secondary">
                     Already have an account? Sign in here
                 </Link>
             </aside>
