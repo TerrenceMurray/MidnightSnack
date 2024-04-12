@@ -55,9 +55,9 @@ export default function Navbar ()
                 {/* TODO Add user id to settings profile */}
 
                 {user === null ?
-                    <Link className="hover:text-secondary text-sm" to="/signin">Sign In</Link>
+                    <Link className="hover:text-secondary" to="/signin">Sign In</Link>
                     :
-                    <NavLink to="/settings/1/profile">
+                    <NavLink to="/settings/profile">
                         <Avatar className="rounded-lg">
                             <AvatarFallback className="text-secondary bg-foreground rounded-lg">
                                 {UserInformation.getInitials(user.user_metadata.fname, user.user_metadata.lname)}
