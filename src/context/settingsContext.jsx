@@ -37,22 +37,27 @@ export default function SettingsContextProvider ({ children })
                 if (restaurantError)
                     throw restaurantError;
 
-                // Fetch restaurant cover image
-                const { data: imageData, error: imageError } = await supabase
-                    .storage
-                    .from("restaurants")
-                    .download(restaurantData[0].cover);
+                if (restaurantData.length > 0) 
+                {
+                    // Fetch restaurant cover image
+                    const { data: imageData, error: imageError } = await supabase
+                        .storage
+                        .from("restaurants")
+                        .download(restaurantData[0].cover);
 
-                if (imageError)
-                    throw error;
 
-                setRestaurant({
-                    cover: [new File([imageData], "cover.jpg", { type: "image/jpeg" })],
-                    name: restaurantData[0].name,
-                    city: restaurantData[0].city,
-                    openingTime: restaurantData[0].opens_at,
-                    closingTime: restaurantData[0].closes_at
-                } || null);
+                    if (imageError)
+                        throw error;
+
+                    setRestaurant({
+                        cover: [new File([imageData], "cover.jpg", { type: "image/jpeg" })],
+                        name: restaurantData[0].name,
+                        city: restaurantData[0].city,
+                        openingTime: restaurantData[0].opens_at,
+                        closingTime: restaurantData[0].closes_at,
+                        imagePath: restaurantData[0].cover,
+                    } || null);
+                }
 
                 setIsLoading(false);
             } catch (error)

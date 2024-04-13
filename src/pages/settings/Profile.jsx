@@ -35,7 +35,6 @@ export default function Profile ()
 
     useEffect(() =>
     {
-        // console.log(user);
         if (!isFetching && user)
         {
             reset({
@@ -121,8 +120,8 @@ export default function Profile ()
             {
                 isFetching || !user ? <p>Loading...</p> :
                     <section>
-                        <form className="flex flex-col gap-6 w-[40rem]" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                            {error && <span className="text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
+                        {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
+                        <form className="flex flex-col gap-6" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex justify-between w-full gap-8">
                                 <div className="gap-2 flex flex-col w-full">
                                     <label className="text-sm" htmlFor="fname">First Name</label>

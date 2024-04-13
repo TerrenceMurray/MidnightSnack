@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { SettingsContext } from "@/context/settingsContext";
 import { useContext } from "react";
 import axios from "axios";
@@ -24,10 +24,23 @@ import
 } from "@/components/ui/popover";
 import _Restaurant from "@/classes/Restaurant";
 import { supabase } from "@/client/supabase";
+import
+{
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 async function getCities ()
 {
-    return await axios.get('/public/cities.json');
+    return await axios.get('/cities.json');
 }
 
 export default function Restaurant ()
@@ -35,13 +48,15 @@ export default function Restaurant ()
     const [cities, setCities] = useState([]);
     const [open, setOpen] = useState(false);
     const [cityValue, setCityValue] = useState("");
-    // const [restaurant, setRestaurant] = useState(null);
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const { isLoading: isFetching, restaurant, setRestaurant } = useContext(SettingsContext);
 
-    const [isNew, setIsNew] = useState(false);
+    const [isNew, setIsNew] = useState(true);
+
+    const { toast } = useToast();
 
     const {
         register,
@@ -67,6 +82,57 @@ export default function Restaurant ()
     });
 
 
+    const handleDelete = async () =>
+    {
+        try
+        {
+            setIsLoading(true);
+            const response = await supabase.auth.getUser();
+
+            // Delete from bucket
+            const filename = `public/${restaurant.name}/cover.${restaurant.cover[0].type.split("/")[1]}`;
+
+            const { error: imageError } = await supabase
+                .storage
+                .from('restaurants')
+                .remove([filename]);
+
+            if (imageError)
+                throw imageError;
+
+            // Delete from database
+            const { error } = await supabase
+                .from('restaurant')
+                .delete()
+                .eq('userID', response.data.user.id);
+
+            if (error)
+                throw error;
+
+            // Remove from context
+            setIsNew(true);
+            setRestaurant(null);
+            reset({
+                name: "",
+                city: "",
+                openingTime: "",
+                closingTime: "",
+                cover: []
+            });
+            setCityValue("");
+
+            toast({
+                title: "Restaurant deleted successfully.",
+                type: "success"
+            });
+            setIsLoading(false);
+        } catch (error)
+        {
+            setError(error.message || error.error_description);
+        }
+    };
+
+
     useEffect(() =>
     {
         getCities().then((response) =>
@@ -89,28 +155,31 @@ export default function Restaurant ()
 
         try
         {
-            isLoading(true);
+            setIsLoading(true);
             setError(null);
-
+            const response = await supabase.auth.getUser();
             // upload image to bucket
+            const filename = `public/${data.name}/cover.${data.cover[0].type.split("/")[1]}`;
+
             const { uploadError } = await supabase
                 .storage
-                .from("images")
-                .upload(`restaurants/${data.cover[0].name}`, data.cover[0]);
+                .from("restaurants")
+                .upload(filename, data.cover[0]);
 
             if (uploadError)
                 throw uploadError;
 
             // add restaurant to database
-            const { data: { dataError } } = await supabase
-                .from("restaurants")
+            const { error: dataError } = await supabase
+                .from("restaurant")
                 .insert([
                     {
                         name: data.name,
                         city: data.city,
-                        openingTime: data.openingTime,
-                        closingTime: data.closingTime,
-                        cover: `restaurants/${data.cover[0].name}`
+                        opens_at: data.openingTime,
+                        closes_at: data.closingTime,
+                        cover: filename,
+                        userID: response.data.user.id
                     }
                 ]);
 
@@ -119,6 +188,21 @@ export default function Restaurant ()
 
 
             setIsLoading(false);
+
+            setRestaurant({
+                cover: data.cover,
+                name: data.name,
+                city: data.city,
+                openingTime: data.openingTime,
+                closingTime: data.closingTime,
+            });
+
+            setIsNew(false);
+
+            toast({
+                title: "Restaurant added successfully.",
+                type: "success"
+            });
         } catch (error)
         {
             setIsLoading(false);
@@ -140,8 +224,8 @@ export default function Restaurant ()
                     ?
                     (
                         <section>
-                            {error && <span className="text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
-                            <form className="flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
+                            {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg mb-8">An error has occurred: {error}</span>}
+                            <form className="flex flex-col gap-6 " onSubmit={handleSubmit(onSubmit)}>
                                 <div className="flex gap-8 items-end" >
                                     <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg w-48 aspect-square ">
                                         {watch("cover")[0]
@@ -307,7 +391,7 @@ export default function Restaurant ()
                                 </div>
 
                                 <div className="mt-6 flex gap-6">
-                                    <Button disabled={!isDirty || !isValid} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
+                                    <Button disabled={!isDirty || !isValid || isLoading} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
                                         {isLoading ? "Loading..." : "Create restaurant"}
                                     </Button>
                                 </div>
@@ -316,7 +400,7 @@ export default function Restaurant ()
                     )
                     :
                     <>
-                        <form className="flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
+                        <section className="flex flex-col gap-6 w-[40rem]">
                             <div className="flex gap-8 items-end" >
                                 <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg w-32 aspect-square ">
                                     <img
@@ -332,15 +416,13 @@ export default function Restaurant ()
                                     id="name"
                                     className="bg-foreground placeholder:text-secondary p-6"
                                     value={restaurant.name}
-                                    disabled="true"
+                                    disabled={true}
                                 />
-
-                                {errors.name && <span className="text-sm text-red-600">{errors.name.message}</span>}
                             </div>
 
                             <div className="gap-2 flex flex-col w-full">
                                 <label className="text-sm" htmlFor="city" >City</label>
-                                <Input className="bg-foreground placeholder:text-secondary p-6" disabled="true" value={restaurant.city} type="text"  />
+                                <Input className="bg-foreground placeholder:text-secondary p-6" disabled={true} value={restaurant.city} type="text" />
                             </div>
 
                             <div className="flex justify-between w-full gap-8">
@@ -349,39 +431,42 @@ export default function Restaurant ()
                                     <Input className="bg-foreground placeholder:text-secondary p-6"
                                         type="time"
                                         id="openingTime"
-                                        {...register("openingTime",
-                                            {
-                                                required: {
-                                                    value: true,
-                                                    message: "This field is required."
-                                                },
-                                                validate: (value) => _Restaurant.isValidHours(value, getValues("closingTime")) || "Invalid time range."
-                                            }
-                                        )} />
-                                    {errors.openingTime && <span className="text-sm text-red-600">{errors.openingTime.message}</span>}
+                                        value={restaurant.openingTime}
+                                        disabled={true} />
                                 </div>
                                 <div className="gap-2 flex flex-col w-full">
                                     <label className="text-sm" htmlFor="closingTime">Closing Time</label>
                                     <Input className="bg-foreground placeholder:text-secondary p-6"
                                         type="time"
                                         id="closingTime"
-                                        {...register("closingTime",
-                                            {
-                                                required: {
-                                                    value: true,
-                                                    message: "This field is required."
-                                                },
-                                                validate: (value) => _Restaurant.isValidHours(getValues("openingTime"), value) || "Invalid time range."
-                                            }
-                                        )} />
-                                    {errors.closingTime && <span className="text-sm text-red-600">{errors.closingTime.message}</span>}
+                                        value={restaurant.closingTime}
+                                        disabled={true}
+                                    />
                                 </div>
                             </div>
 
                             <div className="mt-6 flex gap-6">
-                                <Button disabled={restaurant === null} className="hover:text-button-text hover:bg-red-600 transition-all duration-75" size="lg" variant="destructive" type="button" role="sign out of account">Delete</Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger className="transition-all duration-100 text-destructive-foreground bg-destructive px-6 py-3 rounded-lg hover:text-button-text hover:bg-destructive-foreground" disabled={isLoading} >{isLoading ? "Loading..." : "Delete"}</AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete your restaurant
+                                                and remove all of its data from our servers.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel className="hover:bg-primary hover:text-button-text">
+                                                Cancel
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction onClick={handleDelete} className="hover:bg-destructive-foreground">Continue</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                                {/*  */}
                             </div>
-                        </form>
+                        </section>
                     </>
             }
         </>
