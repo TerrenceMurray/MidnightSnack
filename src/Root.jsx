@@ -11,6 +11,8 @@ export default function Root ()
 {
     const [session, setSession] = useState(null);
 
+    console.log(import.meta.env);
+
     useEffect(() =>
     {
         supabase.auth.getSession().then(({ data: { session } }) =>

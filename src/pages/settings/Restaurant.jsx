@@ -55,7 +55,7 @@ export default function Restaurant ()
 
     const { isLoading: isFetching, restaurant, setRestaurant } = useContext(SettingsContext);
 
-    const [isNew, setIsNew] = useState(true);
+    const [isNew, setIsNew] = useState(restaurant === null);
 
     const { toast } = useToast();
 
