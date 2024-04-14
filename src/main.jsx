@@ -25,7 +25,7 @@ import MenuItems from '@/pages/settings/MenuItems';
 import RestaurantsLoader from '@/loaders/restaurants.loader.js';
 import RestaurantLoader from '@/loaders/restaurant.loader.js';
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
     {
         path: '/',
         element: <Root />,
@@ -63,10 +63,6 @@ export const router = createBrowserRouter([
                 element: <Settings />,
                 
                 children: [
-                    {
-                        index: true,
-                        element: <Profile />,
-                    },
                     {
                         path: 'profile',
                         element: <Profile />,

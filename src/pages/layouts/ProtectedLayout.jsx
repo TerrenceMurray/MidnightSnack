@@ -7,7 +7,7 @@ export default function ProtectedLayout ({ children })
     const session = useContext(SessionContext);
 
     if (session === null)
-        return <Navigate to="/signin" />;
+        return <Navigate to="/signin" replace />;
 
     return <>{children}</>;
 

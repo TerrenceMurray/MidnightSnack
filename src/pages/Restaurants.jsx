@@ -33,12 +33,12 @@ export default function Restaurants ()
                     <Input type="text" className="w-full py-4 px-8 h-auto bg-foreground placeholder:text-secondary" onKeyUp={handleSearch} placeholder="Search for a restaurant" />
                     <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-8 text-secondary text-sm"></i>
                 </div>
-                <section className="mt-8 flex flex-wrap gap-9">
+                <section className="mt-8 flex flex-wrap gap-8">
                     {
                         restaurants.map(business => <RestaurantCard key={business.restaurant.id} restaurant={business.restaurant} />)
                     }
                 </section>
             </section>
         </main>
-    );
+    ); 
 }

@@ -5,6 +5,7 @@ import { SessionContext } from "./context/sessionContext";
 import { useState, useEffect } from "react";
 import { supabase } from "./client/supabase";
 import { Toaster } from "./components/ui/toaster";
+// import AuthProvider from "./providers/AuthProvider";
 
 export default function Root ()
 {
@@ -27,7 +28,9 @@ export default function Root ()
         <Layout>
             <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
                 <SessionContext.Provider value={session}>
-                    <Outlet />
+                    {/* <AuthProvider> */}
+                        <Outlet />
+                    {/* </AuthProvider> */}
                 </SessionContext.Provider>
             </APIProvider>
             <Toaster />

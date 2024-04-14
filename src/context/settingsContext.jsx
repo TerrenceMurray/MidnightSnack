@@ -6,6 +6,7 @@ export const SettingsContext = createContext(null);
 export default function SettingsContextProvider ({ children })
 {
     const [restaurant, setRestaurant] = useState(null);
+    const [categories, setCategories] = useState([]);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -59,6 +60,14 @@ export default function SettingsContextProvider ({ children })
                     } || null);
                 }
 
+                // Fetch categories
+                const { data: categoriesData, categoriesError } = await supabase.from("categories").select().eq("userID", user.id);
+
+                if (categoriesError)
+                    throw categoriesError;
+
+                setCategories(categoriesData || []);
+
                 setIsLoading(false);
             } catch (error)
             {
@@ -69,7 +78,7 @@ export default function SettingsContextProvider ({ children })
     }, [error]);
 
     return (
-        <SettingsContext.Provider value={{ restaurant, user, isLoading, error, setUser, setRestaurant }}>
+        <SettingsContext.Provider value={{ restaurant, user, isLoading, error, setUser, setRestaurant, categories, setCategories }}>
             {children}
         </SettingsContext.Provider>
     );
