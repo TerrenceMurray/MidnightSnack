@@ -160,7 +160,7 @@ export default function Categories ()
                             {
                                 filter === "" ?
                                     categories.map(category => (
-                                        <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
+                                        <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {category.id === isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
                                     ))
                                     :
                                     (() =>
@@ -168,7 +168,7 @@ export default function Categories ()
                                         const results = categories.filter(category => category.category.toLowerCase().includes(filter.toLowerCase()));
                                         if (results.length === 0) return <span className="text-sm text-secondary">No categories found.</span>;
                                         return results.map(category => (
-                                            <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
+                                            <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {category.id === isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
                                         ));
                                     })()
                             }
