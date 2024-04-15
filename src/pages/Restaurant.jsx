@@ -11,10 +11,9 @@ import useCart from "@/hooks/useCart";
 
 export default function Restaurant ()
 {
-    
     const { restaurant, categories, items } = useLoaderData();
     const [filter, setFilter] = useState(-1);
-    
+
     Title(`Midnight Snacks - ${restaurant.name}`);
 
     const onFilterClick = (filter) =>
@@ -24,9 +23,9 @@ export default function Restaurant ()
 
     const isActive = (id) => id === filter;
 
-    
+
     const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity, getTotal } = useCart();
-    // console.log(getTotal());
+
     return (
         <main className="layout gap-x-8">
             <section className="flex gap-12 flex-col h-full row-span-full">
@@ -51,14 +50,14 @@ export default function Restaurant ()
                         </li>
                         {
                             categories.map(category => (
-                                <li key={category.id.category}>
+                                <li key={category.id}>
                                     <Button variant="ghost" className={cn(
                                         "px-4 p-4 hover:opacity-75 transition-opacity duration-75",
                                         {
-                                            "bg-primary text-button-text hover:bg-primary": isActive(category.id.category),
-                                            "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id.category),
+                                            "bg-primary text-button-text hover:bg-primary": isActive(category.id),
+                                            "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id),
                                         }
-                                    )} onClick={() => onFilterClick(category.id.category)}>{category.name}</Button>
+                                    )} onClick={() => onFilterClick(category.id)}>{category.category}</Button>
                                 </li>
                             ))
                         }
@@ -68,7 +67,12 @@ export default function Restaurant ()
                 <ScrollArea className="flex-1">
                     <section className="flex flex-wrap gap-11">
                         {
-                            items.filter(item => filter === -1 || item.id.category === filter).map(item => <MenuItem onClick={() => addToCart(item)} key={item.id.item} item={item} />)
+                            items.filter(menuItem => filter === -1 || menuItem.categoryID === filter).map(
+                                item =>
+                                {
+                                    return <MenuItem onClick={() => addToCart(item)} key={item.id} item={item} />;
+                                }
+                            )
                         }
                     </section>
                 </ScrollArea>

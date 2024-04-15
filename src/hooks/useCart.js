@@ -3,11 +3,6 @@ import { create } from 'zustand';
 const useCart = create((set) => ({
 	orders: [],
 
-	// {
-	// 	item,
-	// 	quantity
-	// }[]
-
 	getTotal: (orders) => {
 		return 50 + orders.reduce(
 			(acc, order) => acc + order.item.price * order.quantity,
@@ -17,8 +12,9 @@ const useCart = create((set) => ({
 	addItem: (item) =>
 		set((state) => {
 			// find if the item already exists
+			console.log(item);
 			const index = state.orders.findIndex(
-				(order) => order.item.id['item'] == item.id['item']
+				(order) => order.item.id == item.id
 			);
 
 			// if it does not exist, add it
@@ -34,13 +30,13 @@ const useCart = create((set) => ({
 		set((state) => {
 			// find if the item already exists
 			const index = state.orders.findIndex(
-				(order) => order.item.id['item'] == itemID
+				(order) => order.item.id == itemID
 			);
 
 			const order = state.orders[index];
 
 			if (order.quantity > 1) order.quantity--;
-			else state.removeItem(order.item.id['item']);
+			else state.removeItem(order.item.id);
 
 			return { orders: [...state.orders] };
 		}),
@@ -48,7 +44,7 @@ const useCart = create((set) => ({
 		set((state) => {
 			// find if the item already exists
 			const index = state.orders.findIndex(
-				(order) => order.item.id['item'] == itemID['item']
+				(order) => order.item.id == itemID
 			);
 
 			state.orders.splice(index, 1);

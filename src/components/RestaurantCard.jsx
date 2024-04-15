@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Image from "@/assets/pexels-fahri-baghirov-15592082.jpg";
 import Restaurant from '@/classes/Restaurant';
 import { cn } from '@/lib/utils';
 
@@ -8,8 +7,7 @@ export default function RestaurantCard ({ restaurant })
     return (
         <article className='border rounded-lg border-foreground w-[21.375rem] hover:opacity-75 transition-opacity duration-75'>
             <Link to={`/restaurants/${restaurant.id}`}>
-                {/* TODO: Add image url */}
-                <img className="rounded-t-lg w-full h-36 object-cover object-center" src={Image} alt="restaurant image" />
+                <img className="rounded-t-lg w-full h-36 object-cover object-center" src={restaurant.imageURL} alt="restaurant image" />
                 <div className='p-8 flex gap-4 flex-col'>
                     <div className='flex items-center gap-2'>
                         <h1 className='font-semibold'>{restaurant.name}</h1>

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 export default function CartOrder ({ order, onRemove, onIncrement, onDecrement })
 {
-
+    console.log(order.item);
     return (
         <li className='flex flex-col gap-4'>
             <div className='flex justify-between w-full'>
@@ -13,7 +13,7 @@ export default function CartOrder ({ order, onRemove, onIncrement, onDecrement }
                 </div>
                 <CartQuantity onIncrement={() => { onIncrement(order.item); }} onDecrement={() => { onDecrement(order.item.id['item']) }} quantity={order.quantity} />
             </div>
-            <p className='ml-auto'>$ {order.item.price * order.quantity}</p>
+            <p className='ml-auto'>$ {(order.item.price * order.quantity).toFixed(2)}</p>
         </li>
     );
 }

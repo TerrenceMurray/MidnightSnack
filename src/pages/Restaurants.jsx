@@ -10,7 +10,7 @@ export default function Restaurants ()
 {
     Title("Midnight Snacks - Restaurants");
 
-    const data = useLoaderData();
+    const { data, error } = useLoaderData();
 
     const [restaurants, setRestaurants] = useState(data);
 
@@ -18,7 +18,7 @@ export default function Restaurants ()
     {
         (debounce(() =>
         {
-            setRestaurants(filter(data, (business) => business.restaurant.name.toLowerCase().includes(e.target.value.toLowerCase())));
+            setRestaurants(filter(data, (restaurant) => restaurant.name.toLowerCase().includes(e.target.value.toLowerCase())));
         }, 150))();
     };
 
@@ -34,11 +34,13 @@ export default function Restaurants ()
                     <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-8 text-secondary text-sm"></i>
                 </div>
                 <section className="mt-8 flex flex-wrap gap-8">
-                    {
-                        restaurants.map(business => <RestaurantCard key={business.restaurant.id} restaurant={business.restaurant} />)
-                    }
+                    {restaurants.length === 0 ?
+                        <span className="text-sm text-secondary">No restaurants found.</span>
+                        :
+                        restaurants.map(restaurant =>
+                            <RestaurantCard key={restaurant.id} restaurant={restaurant} />)}
                 </section>
             </section>
         </main>
-    ); 
+    );
 }
