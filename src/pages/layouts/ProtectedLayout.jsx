@@ -4,11 +4,10 @@ import { useContext } from 'react';
 
 export default function ProtectedLayout ({ children })
 {
-    const session = useContext(SessionContext);
+    const { session, isLoading } = useContext(SessionContext);
 
-    if (session === null)
+    if (!isLoading && session === null)
         return <Navigate to="/signin" replace />;
-
-    return <>{children}</>;
-
+    else if (!isLoading && session !== null)
+        return <>{children}</>;
 }

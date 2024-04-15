@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Title from "@/components/Title";
 import { supabase } from "@/client/supabase";
@@ -13,7 +13,9 @@ export default function SignIn ()
     Title("Midnight Snack - Sign In");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const session = useContext(SessionContext);
+    const { session, isLoading: isSessionLoading, setSession } = useContext(SessionContext);
+
+    const navigate = useNavigate();
 
     const {
         register,
@@ -26,7 +28,7 @@ export default function SignIn ()
         },
     });
 
-    if (session !== null)
+    if (session && !isSessionLoading)
         return <Navigate to="/" />;
 
     const onSubmit = async (formData) =>
@@ -35,7 +37,7 @@ export default function SignIn ()
         {
             setIsLoading(true);
 
-            const { error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email: formData.email,
                 password: formData.password,
             });
@@ -43,7 +45,11 @@ export default function SignIn ()
             if (error)
                 throw error;
 
+            setSession(data.session);
+
             setIsLoading(false);
+            navigate("/");
+
         } catch (error)
         {
             setIsLoading(false);

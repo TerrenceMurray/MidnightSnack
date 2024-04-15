@@ -9,14 +9,12 @@ export default function Settings ()
     return (
         <SettingsContextProvider>
             <ProtectedLayout>
-
                 <div className='flex gap-12 w-full'>
                     <Sidebar />
                     <main className='flex-1 w-full pb-12'>
                         <Outlet />
                     </main>
                 </div>
-
             </ProtectedLayout>
         </SettingsContextProvider>
     );

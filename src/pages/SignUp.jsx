@@ -14,7 +14,7 @@ export default function SignUp ()
 
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const session = useContext(SessionContext);
+    const { session, isLoading: isSessionLoading } = useContext(SessionContext);
     const {
         register,
         handleSubmit,
@@ -31,7 +31,7 @@ export default function SignUp ()
         },
     });
 
-    if (session !== null)
+    if (session && !isSessionLoading)
         return <Navigate to="/" />;
 
 

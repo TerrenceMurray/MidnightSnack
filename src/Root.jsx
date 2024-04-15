@@ -5,10 +5,10 @@ import { SessionContext } from "./context/sessionContext";
 import { useState, useEffect } from "react";
 import { supabase } from "./client/supabase";
 import { Toaster } from "./components/ui/toaster";
-// import AuthProvider from "./providers/AuthProvider";
 
 export default function Root ()
 {
+    const [isLoading, setIsLoading] = useState(true);
     const [session, setSession] = useState(null);
 
     useEffect(() =>
@@ -16,19 +16,21 @@ export default function Root ()
         supabase.auth.getSession().then(({ data: { session } }) =>
         {
             setSession(session);
+            setIsLoading(false);
         });
 
         supabase.auth.onAuthStateChange((_event, session) =>
         {
             setSession(session);
+            setIsLoading(false);
         });
     }, []);
 
     return (
         <Layout>
             <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-                <SessionContext.Provider value={session}>
-                        <Outlet />
+                <SessionContext.Provider value={{ session, isLoading, setSession }}>
+                    <Outlet />
                 </SessionContext.Provider>
             </APIProvider>
             <Toaster />
