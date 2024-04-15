@@ -224,7 +224,7 @@ export default function Restaurant ()
                 (
                     <section>
                         {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg mb-8">An error has occurred: {error}</span>}
-                        <form className="flex flex-col gap-6 " onSubmit={handleSubmit(onSubmit)}>
+                        <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex gap-8 items-end" >
                                 <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg w-32 aspect-square">
                                     {watch("cover")[0]

@@ -156,12 +156,15 @@ export default function Categories ()
                         </div>
 
                         <div className="mt-6 flex gap-4 flex-wrap">
-                            {categories.length === 0 && <span className="text-sm text-secondary">No categories found.</span>}
                             {
                                 filter === "" ?
-                                    categories.map(category => (
-                                        <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {category.id === isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
-                                    ))
+                                    (() =>
+                                    {
+                                        if (categories.length === 0) return <span className="text-sm text-secondary">No categories found.</span>;
+                                        return categories.map(category => (
+                                            <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {category.id === isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
+                                        ));
+                                    })()
                                     :
                                     (() =>
                                     {

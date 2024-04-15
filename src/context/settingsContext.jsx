@@ -5,8 +5,9 @@ export const SettingsContext = createContext(null);
 
 export default function SettingsContextProvider ({ children })
 {
-    const [restaurant, setRestaurant] = useState(null);
+    const [menuItems, setMenuItems] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [restaurant, setRestaurant] = useState(null);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -18,7 +19,8 @@ export default function SettingsContextProvider ({ children })
             try
             {
                 setIsLoading(true);
-                // Fetch user data
+
+                //#region Fetch user data
                 const { data: { user }, userError } = await supabase.auth.getUser();
 
                 if (userError)
@@ -31,8 +33,9 @@ export default function SettingsContextProvider ({ children })
                     phone: user.user_metadata.phone,
                     email: user.email
                 });
+                //#endregion
 
-                // Fetch restaurant data
+                //#region Fetch restaurant data
                 const { data: restaurantData, error: restaurantError } = await supabase.from("restaurant").select().eq("userID", user.id);
 
                 if (restaurantError)
@@ -60,13 +63,25 @@ export default function SettingsContextProvider ({ children })
                     } || null);
                 }
 
-                // Fetch categories
+                // #endregion
+
+                //#region Fetch categories
                 const { data: categoriesData, categoriesError } = await supabase.from("categories").select().eq("userID", user.id);
 
                 if (categoriesError)
                     throw categoriesError;
 
                 setCategories(categoriesData || []);
+                //#endregion
+
+                //#region Fetch menu items
+                const { data: menuItemsData, menuItemsError } = await supabase.from("items").select().eq("userID", user.id);
+
+                if (menuItemsError)
+                    throw menuItemsError;
+
+                setMenuItems(menuItemsData || []);
+                //#endregion
 
                 setIsLoading(false);
             } catch (error)
@@ -78,7 +93,7 @@ export default function SettingsContextProvider ({ children })
     }, [error]);
 
     return (
-        <SettingsContext.Provider value={{ restaurant, user, isLoading, error, setUser, setRestaurant, categories, setCategories }}>
+        <SettingsContext.Provider value={{ restaurant, user, isLoading, error, setUser, setRestaurant, categories, setCategories, menuItems, setMenuItems }}>
             {children}
         </SettingsContext.Provider>
     );
