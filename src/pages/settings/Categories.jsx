@@ -114,7 +114,7 @@ export default function Categories ()
             {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
             <SettingsSkeleton isLoading={isFetching}>
                 <section>
-                    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="flex flex-col gap-6" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 
                         <div className="flex flex-col gap-1">
                             <label className="text-sm py-2" htmlFor="title" >Add a new Category</label>

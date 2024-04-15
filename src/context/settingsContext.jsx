@@ -80,6 +80,20 @@ export default function SettingsContextProvider ({ children })
                 if (menuItemsError)
                     throw menuItemsError;
 
+                // get  public URLs for images
+                for (const item of menuItemsData)
+                {
+                    const { data, error: imageError } = await supabase
+                        .storage
+                        .from("items")
+                        .getPublicUrl(item.cover);
+
+                    if (imageError)
+                        throw imageError;
+
+                    item.imagePath = data.publicUrl;
+                }
+
                 setMenuItems(menuItemsData || []);
                 //#endregion
 

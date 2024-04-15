@@ -30,7 +30,7 @@ import
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
+import { supabase } from "@/client/supabase";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -38,9 +38,10 @@ export default function MenuItems ()
 {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const { isLoading: isFetching } = useContext(SettingsContext);
+    const { isLoading: isFetching, categories, restaurant, menuItems, setMenuItems } = useContext(SettingsContext);
     const { toast } = useToast();
 
+    const [isRemoving, setIsRemoving] = useState(null);
 
     const [categoryValue, setCategoryValue] = useState(null);
 
@@ -49,12 +50,12 @@ export default function MenuItems ()
         register,
         handleSubmit,
         watch,
-        isValid,
         setValue,
         reset,
         trigger,
         formState: {
             errors,
+            isValid,
             isDirty
         }
     } = useForm({
@@ -62,12 +63,14 @@ export default function MenuItems ()
         description: "",
         price: "",
         cover: [],
+        category: ""
     });
 
     useEffect(() =>
     {
         setValue("category", categoryValue);
-    }, [setValue, categoryValue]);
+        trigger("category");
+    }, [setValue, categoryValue, trigger]);
 
 
     register("category", {
@@ -83,9 +86,106 @@ export default function MenuItems ()
 
     };
 
+    const handleDelete = async (id) =>
+    {
+        try
+        {
+            setIsRemoving(id);
+            setError(null);
+
+            // delete image from bucket
+            const imagePath = menuItems.find(item => item.id === id).cover;
+            const { error: imageError } = await supabase.storage.from("items").remove([imagePath]);
+
+            if (imageError)
+                throw imageError;
+
+            const { error } = await supabase.from("items").delete().eq("id", id);
+
+            if (error)
+                throw error;
+
+            // update context
+            setMenuItems(menuItems.filter(item => item.id !== id));
+
+            toast({
+                title: "Menu Item Removed",
+                message: "The menu item has been removed successfully.",
+                type: "success"
+            });
+            setIsLoading(false);
+            setIsRemoving(null);
+        } catch (error)
+        {
+            setError(error.message || error.error_description);
+            setIsLoading(false);
+        }
+    };
+
     const onSubmit = async (data) =>
     {
+        try
+        {
+            if (!isValid) return;
 
+            setIsLoading(true);
+            setError(null);
+
+            const uploadData = { ...data, category: categories.find(category => category.category === data.category).id };
+
+            // upload image to bucket
+            const filename = `public/${restaurant.name}/${Date.now()}.${data.cover[0].type.split("/")[1]}`;
+
+            const { error: imageError } = await supabase.storage.from("items").upload(filename, uploadData.cover[0]);
+            const { data: imageData } = await supabase.storage.from("items").getPublicUrl(filename);
+
+            if (imageError || imageData.publicUrl === null)
+                throw imageError;
+
+            // insert data into database
+            const response = await supabase.auth.getUser();
+            const { data: { user } } = response;
+
+            const { error, data: itemData } = await supabase.from("items").insert({
+                title: uploadData.title,
+                description: uploadData.description,
+                price: uploadData.price,
+                categoryID: uploadData.category,
+                cover: filename,
+                userID: user.id
+            }).select();
+
+            if (error)
+                throw error;
+
+            // update context
+            const item = {
+                ...itemData[0],
+                imagePath: imageData.publicUrl
+            };
+            setMenuItems([...menuItems, item]);
+
+            toast({
+                title: "Menu Item Added",
+                message: "The menu item has been added successfully.",
+                type: "success"
+            });
+            reset(
+                {
+                    title: "",
+                    description: "",
+                    price: "",
+                    cover: [],
+                    category: ""
+                }
+            );
+            setIsLoading(false);
+
+        } catch (error)
+        {
+            setError(error.message || error.error_description);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -106,13 +206,13 @@ export default function MenuItems ()
                                 id="search"
                                 autoComplete="off"
                                 className="bg-foreground placeholder:text-secondary p-6"
-                                placeholder="Filter table for menu items"
+                                placeholder="Filter table for menu items by title e.g. Nigiri Sushi"
                                 onKeyUp={handleFilter}
                             />
                             <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-xs text-secondary"></i>
                         </div>
                         <Dialog onOpenChange={() => { reset({ cover: null }); }}>
-                            <DialogTrigger className="hover:opacity-75 transition-opacity duration-75 h-auto bg-primary text-button-text px-6 rounded-lg">Add menu item</DialogTrigger>
+                            <DialogTrigger className="hover:opacity-75 transition-opacity duration-75 h-auto bg-primary text-button-text px-6 rounded-lg text-sm">Add menu item</DialogTrigger>
                             <DialogContent className="w-[40rem]">
                                 <DialogHeader>
                                     <DialogTitle>Create a new menu item</DialogTitle>
@@ -120,7 +220,8 @@ export default function MenuItems ()
                                         Fill in all of the blank fields below to create a new menu item.
                                     </DialogDescription>
                                 </DialogHeader>
-                                <form className="p-2 flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+                                {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
+                                <form className="p-2 flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="flex items-end gap-8">
                                         <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg aspect-square w-24">
                                             {watch("cover")
@@ -130,6 +231,7 @@ export default function MenuItems ()
                                                             ? URL.createObjectURL(getValues("cover")[0])
                                                             : null
                                                     }
+                                                    onError={(e) => { e.target.style.display = "none"; }}
                                                     alt="Cover" className="w-full h-full object-cover rounded-lg" />
                                                 : null
                                             }
@@ -240,9 +342,7 @@ export default function MenuItems ()
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem className="focus:bg-primary focus:text-button-text" value={null}>None</SelectItem>
-                                                    <SelectItem className="focus:bg-primary focus:text-button-text" value="c1">Category 1</SelectItem>
-                                                    <SelectItem className="focus:bg-primary focus:text-button-text" value="c2">Category 2</SelectItem>
-                                                    <SelectItem className="focus:bg-primary focus:text-button-text" value="c3">Category 3</SelectItem>
+                                                    {categories.map((category) => (<SelectItem key={category.id} className="focus:bg-primary focus:text-button-text" value={category.category}>{category.category}</SelectItem>))}
                                                 </SelectContent>
                                             </Select>
 
@@ -250,7 +350,7 @@ export default function MenuItems ()
                                         </div>
                                     </div>
                                     <div className="mt-6 flex gap-6">
-                                        <Button disabled={!isDirty || isLoading} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
+                                        <Button disabled={isLoading || !isDirty} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
                                             {isLoading ? "Loading..." : "Create Menu Item"}
                                         </Button>
                                     </div>
@@ -266,22 +366,41 @@ export default function MenuItems ()
                                 <TableHead className="w-32">Category</TableHead>
                                 <TableHead className='w-64'>Description</TableHead>
                                 <TableHead className="text-right">Price</TableHead>
-                                <TableHead></TableHead>
+                                <TableHead className="w-20"></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">
-                                    <div className="w-12 h-12 bg-foreground rounded-sm">
-                                        <img src="" onError={(e) => { e.target.style.display = "none"; }} alt="menu item cover" className="w-full h-full object-cover object-center" />
-                                    </div>
-                                </TableCell>
-                                <TableCell><p className="w-36 truncate">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere, similique. Natus, delectus pariatur consequuntur accusantium nihil necessitatibus? Fugit odit ut aut cupiditate debitis, dolores et quibusdam iusto eum, quia maiores.</p></TableCell>
-                                <TableCell><p className="max-w-32 inline-block truncate bg-accent-surface text-button-text rounded-lg py-1 px-2">Chicken</p></TableCell>
-                                <TableCell><p className="w-64 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium porro reprehenderit nihil nobis culpa fugit aliquam magnam alias eum ea!</p></TableCell>
-                                <TableCell className="text-right">$12.99</TableCell>
-                                <TableCell><Button variant="ghost" className="w-10 h-10 hover:bg-destructive hover:text-destructive-foreground"><i className="bi bi-x-lg"></i></Button></TableCell>
-                            </TableRow>
+                            {
+                                (!isFetching && menuItems.length > 0) ?
+                                    (
+                                        menuItems.map((item, index) =>
+                                        {
+
+                                            return (
+                                                <TableRow key={index}>
+                                                    <TableCell className="font-medium">
+                                                        <div className="w-12 h-12 bg-foreground rounded-sm">
+                                                            <img src={item.imagePath} onError={(e) => { e.target.style.display = "none"; }} alt="menu item cover" className="w-full h-full object-cover object-center rounded-sm" />
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell><p className="w-36 truncate">{item.title}</p></TableCell>
+                                                    <TableCell><p className="max-w-32 inline-block truncate bg-accent-surface text-button-text rounded-lg py-1 px-2">{categories.find((category) => category.id === item.categoryID).category} </p></TableCell>
+                                                    <TableCell><p className="w-64 line-clamp-2">{item.description}</p></TableCell>
+                                                    <TableCell className="text-right">${parseFloat(item.price).toFixed(2)}</TableCell>
+                                                    <TableCell>
+                                                        <Button disabled={isRemoving == item.id} variant="ghost" className="w-10 h-10 hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleDelete(item.id)}>
+                                                            {isRemoving == item.id ? <span className="text-destructive-foreground">Deleting...</span> : <i className="bi bi-x-lg"></i>}
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })
+                                    )
+                                    :
+                                    <TableRow>
+                                        <TableCell colSpan="6" className="text-center">No menu items found.</TableCell>
+                                    </TableRow>
+                            }
                         </TableBody>
                     </Table>
                 </SettingsSkeleton>

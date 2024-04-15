@@ -159,7 +159,7 @@ export default function Restaurant ()
             setError(null);
             const response = await supabase.auth.getUser();
             // upload image to bucket
-            const filename = `public/${data.name}/cover.${data.cover[0].type.split("/")[1]}`;
+            const filename = `public/${data.name}/${Date.now()}.${data.cover[0].type.split("/")[1]}`;
 
             const { uploadError } = await supabase
                 .storage
@@ -224,7 +224,7 @@ export default function Restaurant ()
                 (
                     <section>
                         {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg mb-8">An error has occurred: {error}</span>}
-                        <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+                        <form className="flex flex-col gap-6" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex gap-8 items-end" >
                                 <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg w-32 aspect-square">
                                     {watch("cover")[0]
@@ -446,7 +446,7 @@ export default function Restaurant ()
 
                         <div className="mt-6 flex gap-6">
                             <AlertDialog>
-                                <AlertDialogTrigger className="transition-all duration-100 text-destructive-foreground bg-destructive px-6 py-3 rounded-lg hover:text-button-text hover:bg-destructive-foreground" disabled={isLoading} >{isLoading ? "Loading..." : "Delete"}</AlertDialogTrigger>
+                                <AlertDialogTrigger className="transition-all duration-100 text-destructive-foreground bg-destructive px-6 py-3 rounded-lg hover:text-button-text hover:bg-destructive-foreground text-sm" disabled={isLoading} >{isLoading ? "Loading..." : "Delete"}</AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
