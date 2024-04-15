@@ -33,17 +33,20 @@ import
 import { supabase } from "@/client/supabase";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Title from "@/components/Title";
 
 export default function MenuItems ()
 {
+    Title("Midnight Snack - Menu Items");
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const { isLoading: isFetching, categories, restaurant, menuItems, setMenuItems } = useContext(SettingsContext);
     const { toast } = useToast();
 
     const [isRemoving, setIsRemoving] = useState(null);
-
     const [categoryValue, setCategoryValue] = useState(null);
+    const [filter, setFilter] = useState("");
 
     const {
         getValues,
@@ -81,9 +84,10 @@ export default function MenuItems ()
     });
 
 
-    const handleFilter = () =>
+    const handleFilter = (e) =>
     {
-
+        const value = e.target.value;
+        setFilter(value);
     };
 
     const handleDelete = async (id) =>
@@ -225,7 +229,8 @@ export default function MenuItems ()
                                     <div className="flex items-end gap-8">
                                         <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg aspect-square w-24">
                                             {watch("cover")
-                                                ? <img
+                                                ? getValues("cover").length > 0
+                                                && <img
                                                     src={
                                                         getValues("cover")[0]
                                                             ? URL.createObjectURL(getValues("cover")[0])
@@ -373,28 +378,59 @@ export default function MenuItems ()
                             {
                                 (!isFetching && menuItems.length > 0) ?
                                     (
-                                        menuItems.map((item, index) =>
-                                        {
+                                        filter === "" ?
+                                            menuItems.map((item, index) =>
+                                            {
 
-                                            return (
-                                                <TableRow key={index}>
-                                                    <TableCell className="font-medium">
-                                                        <div className="w-12 h-12 bg-foreground rounded-sm">
-                                                            <img src={item.imagePath} onError={(e) => { e.target.style.display = "none"; }} alt="menu item cover" className="w-full h-full object-cover object-center rounded-sm" />
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell><p className="w-36 truncate">{item.title}</p></TableCell>
-                                                    <TableCell><p className="max-w-32 inline-block truncate bg-accent-surface text-button-text rounded-lg py-1 px-2">{categories.find((category) => category.id === item.categoryID).category} </p></TableCell>
-                                                    <TableCell><p className="w-64 line-clamp-2">{item.description}</p></TableCell>
-                                                    <TableCell className="text-right">${parseFloat(item.price).toFixed(2)}</TableCell>
-                                                    <TableCell>
-                                                        <Button disabled={isRemoving == item.id} variant="ghost" className="w-10 h-10 hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleDelete(item.id)}>
-                                                            {isRemoving == item.id ? <span className="text-destructive-foreground">Deleting...</span> : <i className="bi bi-x-lg"></i>}
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })
+                                                return (
+                                                    <TableRow key={index}>
+                                                        <TableCell className="font-medium">
+                                                            <div className="w-12 h-12 bg-foreground rounded-sm">
+                                                                <img src={item.imagePath} onError={(e) => { e.target.style.display = "none"; }} alt="menu item cover" className="w-full h-full object-cover object-center rounded-sm" />
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell><p className="w-36 truncate">{item.title}</p></TableCell>
+                                                        <TableCell><p className="max-w-32 inline-block truncate bg-accent-surface text-button-text rounded-lg py-1 px-2">{categories.find((category) => category.id === item.categoryID).category} </p></TableCell>
+                                                        <TableCell><p className="w-64 line-clamp-2">{item.description}</p></TableCell>
+                                                        <TableCell className="text-right">${parseFloat(item.price).toFixed(2)}</TableCell>
+                                                        <TableCell>
+                                                            <Button disabled={isRemoving == item.id} variant="ghost" className="w-10 h-10 hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleDelete(item.id)}>
+                                                                {isRemoving == item.id ? <span className="text-destructive-foreground">Deleting...</span> : <i className="bi bi-x-lg"></i>}
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })
+                                            :
+                                            (() =>
+                                            {
+                                                const filteredItems = menuItems.filter(item => item.title.toLowerCase().includes(filter.toLowerCase()));
+                                                
+                                                if (filteredItems.length === 0) return <TableRow><TableCell colSpan="6" className="text-center">No menu items found.</TableCell></TableRow>;
+
+                                                return filteredItems.map((item, index) =>
+                                                {
+
+                                                    return (
+                                                        <TableRow key={index}>
+                                                            <TableCell className="font-medium">
+                                                                <div className="w-12 h-12 bg-foreground rounded-sm">
+                                                                    <img src={item.imagePath} onError={(e) => { e.target.style.display = "none"; }} alt="menu item cover" className="w-full h-full object-cover object-center rounded-sm" />
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell><p className="w-36 truncate">{item.title}</p></TableCell>
+                                                            <TableCell><p className="max-w-32 inline-block truncate bg-accent-surface text-button-text rounded-lg py-1 px-2">{categories.find((category) => category.id === item.categoryID).category} </p></TableCell>
+                                                            <TableCell><p className="w-64 line-clamp-2">{item.description}</p></TableCell>
+                                                            <TableCell className="text-right">${parseFloat(item.price).toFixed(2)}</TableCell>
+                                                            <TableCell>
+                                                                <Button disabled={isRemoving == item.id} variant="ghost" className="w-10 h-10 hover:bg-destructive hover:text-destructive-foreground" onClick={() => handleDelete(item.id)}>
+                                                                    {isRemoving == item.id ? <span className="text-destructive-foreground">Deleting...</span> : <i className="bi bi-x-lg"></i>}
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                });
+                                            })()
                                     )
                                     :
                                     <TableRow>

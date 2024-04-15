@@ -7,9 +7,12 @@ import { useContext } from "react";
 import { SettingsContext } from "@/context/settingsContext";
 import SettingsSkeleton from "@/components/SettingsSkeleton";
 import { useToast } from "@/components/ui/use-toast";
+import Title from "@/components/Title";
 
 export default function Categories ()
 {
+    Title("Midnight Snack - Categories");
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 

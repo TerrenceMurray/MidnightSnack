@@ -38,6 +38,7 @@ import
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import SettingsSkeleton from "@/components/SettingsSkeleton";
+import Title from "@/components/Title";
 
 async function getCities ()
 {
@@ -46,6 +47,8 @@ async function getCities ()
 
 export default function Restaurant ()
 {
+    Title("Midnight Snack - Restaurant");
+
     const [cities, setCities] = useState([]);
     const [open, setOpen] = useState(false);
     const [cityValue, setCityValue] = useState("");

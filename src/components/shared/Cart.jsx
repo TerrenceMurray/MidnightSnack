@@ -12,7 +12,7 @@ export default function Cart ({ children, className, total = 0 })
                     {Children.count(children) === 0 ? <p className="text-secondary text-center">Your cart is empty</p> : children}
                 </ul>
             </ScrollArea>
-            <section className='flex flex-col py-6 gap-6 font-semibold border-t border-t-foreground mt-auto'>
+            <section className='flex flex-col pt-6 gap-6 font-semibold border-t border-t-foreground mt-auto'>
                 <div className='flex justify-between'>
                     <p>Delivery</p>
                     <p>$50.00</p>

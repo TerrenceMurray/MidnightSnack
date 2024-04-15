@@ -77,7 +77,7 @@ export default function Restaurant ()
                 <Cart total={getTotal(orders)}>
                     {orders.map((order, index) => <CartOrder onIncrement={addToCart} onDecrement={reduceOrderQuantity} onRemove={removeFromCart} key={index} order={order} />)}
                 </Cart>
-                <Link className="mt-auto bg-accent-surface text-center text-button-text py-4 rounded-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:opacity-60 transition-opacity duration-75" to="/cart">Continue</Link>
+                <Link className="mt-6 bg-accent-surface text-center text-button-text py-4 rounded-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:opacity-60 transition-opacity duration-75" to="/cart">Continue</Link>
             </section>
         </main>
     );

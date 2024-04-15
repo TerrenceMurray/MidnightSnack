@@ -19,7 +19,7 @@ export default function Restaurants ()
         (debounce(() =>
         {
             setRestaurants(filter(data, (business) => business.restaurant.name.toLowerCase().includes(e.target.value.toLowerCase())));
-        }, 200))();
+        }, 150))();
     };
 
     return (
