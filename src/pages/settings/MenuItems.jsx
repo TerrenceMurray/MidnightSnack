@@ -90,6 +90,7 @@ export default function MenuItems ()
                             <label className="txt-sm" htmlFor="search" ></label>
                             <Input type="text"
                                 id="search"
+                                autoComplete="off"
                                 className="bg-foreground placeholder:text-secondary p-6"
                                 placeholder="Filter table for menu items"
                                 onKeyUp={handleFilter}

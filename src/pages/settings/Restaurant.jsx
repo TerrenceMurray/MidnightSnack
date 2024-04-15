@@ -357,7 +357,7 @@ export default function Restaurant ()
                             <div className="flex justify-between w-full gap-8">
                                 <div className="gap-2 flex flex-col w-full">
                                     <label className="text-sm" htmlFor="openingTime">Opening Time</label>
-                                    <Input className="bg-foreground placeholder:text-secondary p-6"
+                                    <Input className="bg-foreground placeholder:text-secondary h-auto py-3.5 px-6"
                                         type="time"
                                         id="openingTime"
                                         {...register("openingTime",
@@ -373,7 +373,7 @@ export default function Restaurant ()
                                 </div>
                                 <div className="gap-2 flex flex-col w-full">
                                     <label className="text-sm" htmlFor="closingTime">Closing Time</label>
-                                    <Input className="bg-foreground placeholder:text-secondary p-6"
+                                    <Input className="bg-foreground placeholder:text-secondary h-auto py-3.5 px-6"
                                         type="time"
                                         id="closingTime"
                                         {...register("closingTime",
