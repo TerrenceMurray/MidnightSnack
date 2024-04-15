@@ -17,6 +17,7 @@ export default function Categories ()
 
     const { toast } = useToast();
     const { isLoading: isFetching, categories, setCategories } = useContext(SettingsContext);
+    const [filter, setFilter] = useState("");
 
     const {
         register,
@@ -36,7 +37,7 @@ export default function Categories ()
         {
             setIsRemoving(id);
             const { error } = await supabase.from("categories").delete().eq("id", id);
-            
+
             if (error)
                 throw error;
 
@@ -96,6 +97,12 @@ export default function Categories ()
         }
     };
 
+    const handleFilter = (e) =>
+    {
+        const value = e.target.value;
+        setFilter(value);
+    };
+
     return (
         <>
             <section className="flex flex-col gap-1 mb-8">
@@ -107,7 +114,7 @@ export default function Categories ()
             {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
             <SettingsSkeleton isLoading={isFetching}>
                 <section>
-                    <form className="flex flex-col gap-6 w-[40rem]" onSubmit={handleSubmit(onSubmit)}>
+                    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
 
                         <div className="flex flex-col gap-1">
                             <label className="text-sm py-2" htmlFor="title" >Add a new Category</label>
@@ -143,15 +150,28 @@ export default function Categories ()
                                 id="search"
                                 className="bg-foreground placeholder:text-secondary p-6 "
                                 placeholder="Search for a category"
+                                onKeyUp={handleFilter}
                             />
                             <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-xs text-secondary"></i>
                         </div>
 
                         <div className="mt-6 flex gap-4 flex-wrap">
                             {categories.length === 0 && <span className="text-sm text-secondary">No categories found.</span>}
-                            {categories.map(category => (
-                                <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
-                            ))}
+                            {
+                                filter === "" ?
+                                    categories.map(category => (
+                                        <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
+                                    ))
+                                    :
+                                    (() =>
+                                    {
+                                        const results = categories.filter(category => category.category.toLowerCase().includes(filter.toLowerCase()));
+                                        if (results.length === 0) return <span className="text-sm text-secondary">No categories found.</span>;
+                                        return results.map(category => (
+                                            <Button type="button" key={category.id} className="bg-accent-surface gap-2 rounded px-4 py-2 hover:opacity-75 transition-opacity duration-100" disabled={category.id === isRemoving} onClick={() => handleDelete(category.id)}> {isRemoving ? "Deleting..." : category.category} <i className="bi bi-x-lg"></i> </Button>
+                                        ));
+                                    })()
+                            }
                         </div>
                     </section>
                 </section>

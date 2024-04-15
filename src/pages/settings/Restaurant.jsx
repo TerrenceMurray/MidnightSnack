@@ -399,7 +399,7 @@ export default function Restaurant ()
                 )
                 :
                 <>
-                    <section className="flex flex-col gap-6 w-[40rem]">
+                    <section className="flex flex-col gap-6">
                         <div className="flex gap-8 items-end" >
                             <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg w-32 h-32">
                                 <img
@@ -427,7 +427,7 @@ export default function Restaurant ()
                         <div className="flex justify-between w-full gap-8">
                             <div className="gap-2 flex flex-col w-full">
                                 <label className="text-sm" htmlFor="openingTime">Opening Time</label>
-                                <Input className="bg-foreground placeholder:text-secondary p-6"
+                                <Input className="bg-foreground placeholder:text-secondary h-auto py-3.5 px-6"
                                     type="time"
                                     id="openingTime"
                                     value={restaurant.openingTime}
@@ -435,7 +435,7 @@ export default function Restaurant ()
                             </div>
                             <div className="gap-2 flex flex-col w-full">
                                 <label className="text-sm" htmlFor="closingTime">Closing Time</label>
-                                <Input className="bg-foreground placeholder:text-secondary p-6"
+                                <Input className="bg-foreground placeholder:text-secondary h-auto py-3.5 px-6"
                                     type="time"
                                     id="closingTime"
                                     value={restaurant.closingTime}

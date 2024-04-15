@@ -11,8 +11,6 @@ export default function Root ()
 {
     const [session, setSession] = useState(null);
 
-    console.log(import.meta.env);
-
     useEffect(() =>
     {
         supabase.auth.getSession().then(({ data: { session } }) =>
@@ -30,9 +28,7 @@ export default function Root ()
         <Layout>
             <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
                 <SessionContext.Provider value={session}>
-                    {/* <AuthProvider> */}
                         <Outlet />
-                    {/* </AuthProvider> */}
                 </SessionContext.Provider>
             </APIProvider>
             <Toaster />
