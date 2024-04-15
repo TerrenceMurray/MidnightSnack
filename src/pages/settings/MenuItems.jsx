@@ -32,6 +32,7 @@ import
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function MenuItems ()
 {
@@ -39,6 +40,7 @@ export default function MenuItems ()
     const [isLoading, setIsLoading] = useState(false);
     const { isLoading: isFetching } = useContext(SettingsContext);
     const { toast } = useToast();
+
 
     const [categoryValue, setCategoryValue] = useState(null);
 
@@ -48,21 +50,33 @@ export default function MenuItems ()
         handleSubmit,
         watch,
         isValid,
+        setValue,
+        reset,
+        trigger,
         formState: {
             errors,
             isDirty
         }
     } = useForm({
-        cover: [],
         title: "",
         description: "",
         price: "",
+        cover: [],
     });
 
     useEffect(() =>
     {
-        console.log(categoryValue);
-    }, [categoryValue]);
+        setValue("category", categoryValue);
+    }, [setValue, categoryValue]);
+
+
+    register("category", {
+        required: {
+            value: true,
+            message: "This field is required."
+        }
+    });
+
 
     const handleFilter = () =>
     {
@@ -97,7 +111,7 @@ export default function MenuItems ()
                             />
                             <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-xs text-secondary"></i>
                         </div>
-                        <Dialog>
+                        <Dialog onOpenChange={() => { reset({ cover: null }); }}>
                             <DialogTrigger className="hover:opacity-75 transition-opacity duration-75 h-auto bg-primary text-button-text px-6 rounded-lg">Add menu item</DialogTrigger>
                             <DialogContent className="w-[40rem]">
                                 <DialogHeader>
@@ -109,16 +123,16 @@ export default function MenuItems ()
                                 <form className="p-2 flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="flex items-end gap-8">
                                         <div type="cover" id="fileCover" className="bg-foreground placeholder:text-secondary rounded-lg aspect-square w-24">
-                                            {/* {watch("cover")[0]
-                                            ? <img
-                                                src={
-                                                    getValues("cover")[0]
-                                                        ? URL.createObjectURL(getValues("cover")[0])
-                                                        : null
-                                                }
-                                                alt="Cover" className="w-full h-full object-cover rounded-lg" />
-                                            : null
-                                        } */}
+                                            {watch("cover")
+                                                ? <img
+                                                    src={
+                                                        getValues("cover")[0]
+                                                            ? URL.createObjectURL(getValues("cover")[0])
+                                                            : null
+                                                    }
+                                                    alt="Cover" className="w-full h-full object-cover rounded-lg" />
+                                                : null
+                                            }
                                         </div>
                                         <div className="flex flex-col w-full">
                                             <label className="text-sm py-2" htmlFor="cover" >Cover</label>
@@ -199,13 +213,13 @@ export default function MenuItems ()
                                                         value: true,
                                                         message: "This field is required."
                                                     },
-                                                    minLength: {
-                                                        value: 2,
-                                                        message: "Must be at least 2 characters long."
+                                                    min: {
+                                                        value: 0.01,
+                                                        message: "Price must be at least $0.01."
                                                     },
-                                                    maxLength: {
-                                                        value: 50,
-                                                        message: "Must be at most 50 characters long."
+                                                    pattern: {
+                                                        value: /^\d+(\.\d{2})?$/,
+                                                        message: "Price must be a valid number."
                                                     }
                                                 })}
                                             />
@@ -215,19 +229,17 @@ export default function MenuItems ()
                                         <div className="gap-2 flex flex-col w-full">
                                             <label className="text-sm" htmlFor="category" >Category</label>
                                             <Select
-                                                {...register("category", {
-                                                    required: {
-                                                        value: true,
-                                                        message: "This field is required."
-                                                    }
-                                                })}
-
-                                                onValueChange={(value) => setCategoryValue(value)}
+                                                onValueChange={(value) => { setCategoryValue(value); }}
                                             >
                                                 <SelectTrigger className="bg-foreground placeholder:text-secondary p-6" >
-                                                    <SelectValue placeholder="Category" />
+                                                    <SelectValue placeholder="Select a category" className={
+                                                        cn({
+                                                            "text-secondary": categoryValue === null || categoryValue === ""
+                                                        })
+                                                    } />
                                                 </SelectTrigger>
                                                 <SelectContent>
+                                                    <SelectItem className="focus:bg-primary focus:text-button-text" value={null}>None</SelectItem>
                                                     <SelectItem className="focus:bg-primary focus:text-button-text" value="c1">Category 1</SelectItem>
                                                     <SelectItem className="focus:bg-primary focus:text-button-text" value="c2">Category 2</SelectItem>
                                                     <SelectItem className="focus:bg-primary focus:text-button-text" value="c3">Category 3</SelectItem>
@@ -238,7 +250,7 @@ export default function MenuItems ()
                                         </div>
                                     </div>
                                     <div className="mt-6 flex gap-6">
-                                        <Button disabled={!isDirty || !isValid || isLoading} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
+                                        <Button disabled={!isDirty || isLoading} className="hover:opacity-75 transition-opacity duration-75" size="lg" type="submit" role="update account">
                                             {isLoading ? "Loading..." : "Create Menu Item"}
                                         </Button>
                                     </div>
