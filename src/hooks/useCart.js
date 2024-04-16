@@ -32,7 +32,11 @@ const useCart = create((set) => ({
 	reduceOrderQuantity: (itemID) =>
 		set((state) => {
 			// find if the item already exists
-			const index = state.orders.findIndex((item) => item.id == itemID);
+			const index = state.orders.findIndex(
+				(order) => order.item.id == itemID
+			);
+
+			console.log(state.orders);
 
 			const order = state.orders[index];
 
