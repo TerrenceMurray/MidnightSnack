@@ -203,8 +203,8 @@ export default function MenuItems ()
             {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
             <section className="w-full flex flex-col gap-8">
                 <SettingsSkeleton isLoading={isFetching}>
-                    <div className="flex gap-8 w-full">
-                        <div className="relative flex-1">
+                    <div className="flex gap-8 w-full justify-between">
+                        <div className="relative w-96">
                             <label className="txt-sm" htmlFor="search" ></label>
                             <Input type="text"
                                 id="search"
