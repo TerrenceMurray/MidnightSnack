@@ -296,8 +296,8 @@ export default function MenuItems ()
                                                     message: "Must be at least 2 characters long."
                                                 },
                                                 maxLength: {
-                                                    value: 50,
-                                                    message: "Must be at most 50 characters long."
+                                                    value: 150,
+                                                    message: "Must be at most 150 characters long."
                                                 }
                                             })}
                                         />
@@ -405,7 +405,7 @@ export default function MenuItems ()
                                             (() =>
                                             {
                                                 const filteredItems = menuItems.filter(item => item.title.toLowerCase().includes(filter.toLowerCase()));
-                                                
+
                                                 if (filteredItems.length === 0) return <TableRow><TableCell colSpan="6" className="text-center">No menu items found.</TableCell></TableRow>;
 
                                                 return filteredItems.map((item, index) =>

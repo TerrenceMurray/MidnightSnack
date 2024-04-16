@@ -42,7 +42,7 @@ import Title from "@/components/Title";
 
 async function getCities ()
 {
-    return await axios.get('/cities.json');
+    return await axios.get('cities.json');
 }
 
 export default function Restaurant ()

@@ -29,7 +29,7 @@ import { Input } from "@/components/ui/input";
 
 async function getCities ()
 {
-    return await axios.get('/public/cities.json');
+    return await axios.get('cities.json');
 }
 
 export default function Cart ()
