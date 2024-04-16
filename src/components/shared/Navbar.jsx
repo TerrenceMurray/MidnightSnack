@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo.svg";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import CartButton from "../CartButton";
 import { cn } from "@/lib/utils";
@@ -8,7 +7,6 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/client/supabase";
 import UserInformation from "@/classes/UserInformation";
-
 
 export default function Navbar ()
 {
@@ -40,17 +38,12 @@ export default function Navbar ()
                 <NavLink to="/">
                     <img src={logo} aria-label="Go to home page" alt="Midnight Snack Logo" />
                 </NavLink>
-                <div className="relative">
-                    <Input className="w-52 bg-foreground placeholder:text-secondary pr-10" type="text" placeholder="Search for restaurants" />
-                    <i className="bi bi-search absolute top-1/2 -translate-y-1/2 right-4 text-xs text-secondary
-                    "></i>
-                </div>
             </div>
-            <ul className="flex ml-auto items-center gap-8">
+            <ul className="flex ml-8 items-center gap-8">
                 <li><NavLink aria-label="Go to home page" className={isActiveLink} to="/">Home</NavLink></li>
                 <li><NavLink aria-label="Go to restaurants page" className={isActiveLink} to="/restaurants">Restaurants</NavLink></li>
             </ul>
-            <div className="flex gap-6 items-center">
+            <div className="flex gap-6 ml-auto items-center">
                 <CartButton />
                 {/* TODO Add user id to settings profile */}
 
@@ -59,7 +52,7 @@ export default function Navbar ()
                     :
                     <NavLink to="/settings/profile">
                         <Avatar className="rounded-lg">
-                            <AvatarFallback className="text-secondary bg-foreground rounded-lg">
+                            <AvatarFallback className="text-secondary bg-foreground rounded-lg hover:opacity-75 transition-opacity duration-100">
                                 {UserInformation.getInitials(user.user_metadata.fname, user.user_metadata.lname)}
                             </AvatarFallback>
                         </Avatar>
