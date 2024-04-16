@@ -12,7 +12,6 @@ const useCart = create((set) => ({
 	addItem: (item) =>
 		set((state) => {
 			// find if the item already exists
-			console.log(item);
 			const index = state.orders.findIndex(
 				(order) => order.item.id == item.id
 			);
@@ -30,7 +29,7 @@ const useCart = create((set) => ({
 		set((state) => {
 			// find if the item already exists
 			const index = state.orders.findIndex(
-				(order) => order.item.id == itemID
+				(item) => item.id == itemID
 			);
 
 			const order = state.orders[index];
@@ -40,6 +39,7 @@ const useCart = create((set) => ({
 
 			return { orders: [...state.orders] };
 		}),
+	
 	removeItem: (itemID) =>
 		set((state) => {
 			// find if the item already exists

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 
 export default function CartOrder ({ order, onRemove, onIncrement, onDecrement })
 {
-    console.log(order.item);
     return (
         <li className='flex flex-col gap-4'>
             <div className='flex justify-between w-full'>
