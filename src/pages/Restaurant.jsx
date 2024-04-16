@@ -8,6 +8,7 @@ import CartOrder from "@/components/shared/CartOrder";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import useCart from "@/hooks/useCart";
+import { ucwords } from "@/lib/utils/words";
 
 export default function Restaurant ()
 {
@@ -31,8 +32,8 @@ export default function Restaurant ()
             <section className="flex gap-12 flex-col h-full row-span-full">
                 <section className="flex flex-col gap-1">
                     <div className="items-center">
-                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity mr-2" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> {restaurant.name}</h1>
-                        <h3 className="inline mx-4"><i className="bi bi-geo-alt-fill text-secondary"></i> {restaurant.city}</h3>
+                        <h1 className="title inline"><Link className="hover:opacity-60 transition-opacity mr-2" to="/restaurants"><i className="bi bi-arrow-left"></i></Link> {ucwords(restaurant.name)}</h1>
+                        <h3 className="inline mx-4"><i className="bi bi-geo-alt-fill text-secondary"></i> {ucwords(restaurant.city)}</h3>
                     </div>
                     <h2 className="subtitle">Add menu items to your cart</h2>
                 </section>
@@ -57,7 +58,7 @@ export default function Restaurant ()
                                             "bg-primary text-button-text hover:bg-primary": isActive(category.id),
                                             "bg-foreground hover:bg-foreground hover:text-secondary": !isActive(category.id),
                                         }
-                                    )} onClick={() => onFilterClick(category.id)}>{category.category}</Button>
+                                    )} onClick={() => onFilterClick(category.id)}>{ucwords(category.category)}</Button>
                                 </li>
                             ))
                         }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Restaurant from '@/classes/Restaurant';
 import { cn } from '@/lib/utils';
+import { ucwords } from '@/lib/utils/words';
 
 export default function RestaurantCard ({ restaurant })
 {
@@ -10,7 +11,7 @@ export default function RestaurantCard ({ restaurant })
                 <img className="rounded-t-lg w-full h-36 object-cover object-center" src={restaurant.imageURL} alt="restaurant image" />
                 <div className='p-8 flex gap-4 flex-col'>
                     <div className='flex items-center gap-2'>
-                        <h1 className='font-semibold'>{restaurant.name}</h1>
+                        <h1 className='font-semibold'>{ucwords(restaurant.name)}</h1>
                         <h2 className='text-secondary text-sm'><i className="bi bi-geo-alt-fill mr-1"></i>{restaurant.city}</h2>
                     </div>
                     <div className="flex items-center">
