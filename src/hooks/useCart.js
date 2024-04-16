@@ -4,11 +4,15 @@ const useCart = create((set) => ({
 	orders: [],
 
 	getTotal: (orders) => {
-		return 50 + orders.reduce(
-			(acc, order) => acc + order.item.price * order.quantity,
-			0
+		return (
+			50 +
+			orders.reduce(
+				(acc, order) => acc + order.item.price * order.quantity,
+				0
+			)
 		);
 	},
+	emptyCart: () => set({ orders: [] }),
 	addItem: (item) =>
 		set((state) => {
 			// find if the item already exists
@@ -28,9 +32,7 @@ const useCart = create((set) => ({
 	reduceOrderQuantity: (itemID) =>
 		set((state) => {
 			// find if the item already exists
-			const index = state.orders.findIndex(
-				(item) => item.id == itemID
-			);
+			const index = state.orders.findIndex((item) => item.id == itemID);
 
 			const order = state.orders[index];
 
@@ -39,7 +41,7 @@ const useCart = create((set) => ({
 
 			return { orders: [...state.orders] };
 		}),
-	
+
 	removeItem: (itemID) =>
 		set((state) => {
 			// find if the item already exists

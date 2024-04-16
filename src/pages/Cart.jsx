@@ -1,4 +1,3 @@
-// import AddressInput from "@/components/AddressInput";
 import CartComponent from "@/components/shared/Cart";
 import CartOrder from "@/components/shared/CartOrder";
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,9 @@ import
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/client/supabase";
+import { useToast } from "@/components/ui/use-toast";
+
 
 async function getCities ()
 {
@@ -37,9 +39,11 @@ export default function Cart ()
     const {
         register,
         handleSubmit,
+        reset,
         formState: {
             errors,
-            isDirty
+            isDirty,
+            isValid
         }
     } = useForm({
         defaultValues: {
@@ -49,23 +53,66 @@ export default function Cart ()
         }
     });
 
+    const { emptyCart } = useCart();
+
+    const [error, setError] = useState(null);
+
     const [position, setPosition] = useState({ lat: 10.6549, lng: -61.5019 });
     const { orders, addItem: addToCart, removeItem: removeFromCart, reduceOrderQuantity, getTotal } = useCart();
+    const [loading, setLoading] = useState(false);
     const [cities, setCities] = useState([]);
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("");
     const map = useMap();
 
+    const { toast } = useToast();
+
     const formRef = useRef(null);
 
     Title(`Midnight Snacks - Cart`);
 
-    const onSubmit = (data) =>
+    const onSubmit = async (data) =>
     {
-        if (!isDirty) return;
-        const order = { ...data, orders };
-        // TODO: Send order to the API
+        try
+        {
+            setError(null);
+            if (!isDirty && !isValid) return;
+            setLoading(true);
+
+            const order = { ...data, orders, location: { lat: position.lat, lng: position.lng } };
+
+            const { error } = await supabase.from("orders").insert({
+                fname: order.fname,
+                lname: order.lname,
+                orders: order.orders,
+                phone: order.phone,
+                location: order.location
+            });
+
+            if (error)
+                throw error;
+
+            reset({
+                fname: "",
+                lname: "",
+                phone: ""
+            });
+
+            toast({
+                title: "Order was successfully placed.",
+                type: "success"
+            });
+
+            emptyCart();
+
+            setLoading(false);
+
+        } catch (error)
+        {
+            setError(error.message || error.error_description);
+            setLoading(false);
+        }
 
     };
 
@@ -116,6 +163,7 @@ export default function Cart ()
                     <h2 className="subtitle">Confirm your information to proceed with checkout</h2>
                 </section>
                 <section className="flex flex-col mt-12 gap-6">
+                    {error && <span className="block text-destructive-foreground py-4 px-8 bg-destructive text-sm rounded-lg">An error has occurred: {error}</span>}
                     <form className="flex flex-col gap-6" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex justify-between w-full gap-8">
                             <div className="gap-2 flex flex-col w-full">
@@ -245,7 +293,7 @@ export default function Cart ()
                     </Map>
                     <Button
                         variant="cta"
-                        type="submit" disabled={orders.length === 0 || !isDirty || value === ""}
+                        type="submit" disabled={orders.length === 0 || !isDirty || value === "" || loading}
                         onClick={onPlaceOrder} className="hover:opacity-75 transition-opacity duration-75 w-full py-8"
                         size="lg"
                         role="Place order"

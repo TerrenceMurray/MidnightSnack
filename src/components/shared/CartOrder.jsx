@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import CartQuantity from './CartQuantity';
 import { Button } from '@/components/ui/button';
 

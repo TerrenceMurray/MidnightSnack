@@ -36,7 +36,7 @@ export default function Restaurant ()
                     </div>
                     <h2 className="subtitle">Add menu items to your cart</h2>
                 </section>
-
+                
                 <div className="flex flex-col gap-8 col-end-1">
                     <ul className="flex gap-4 flex-wrap">
                         <li>
