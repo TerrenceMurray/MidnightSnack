@@ -45,8 +45,6 @@ export default function Navbar ()
             </ul>
             <div className="flex gap-6 ml-auto items-center">
                 <CartButton />
-                {/* TODO Add user id to settings profile */}
-
                 {user === null ?
                     <Link className="hover:text-secondary" to="/signin">Sign In</Link>
                     :
