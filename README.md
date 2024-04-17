@@ -16,13 +16,18 @@ Welcome to Midnight Snacks, a convenient food delivery platform designed to sati
 #### Frontend
 
 -   React
--   shadcn/ui
+-   Shadcn/ui
 -   Tailwind CSS
 -   Bootstrap Icons
--   React Router
+-   lodash
+-   React Router DOM
+-   React Hook Form
+-   Sharp
+-   React Google Maps
 -   Zustand
 -   Axios
--   Supabase UI
+-   Supabase
+-   Vite
 
 #### Database
 
